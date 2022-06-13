@@ -1,4 +1,4 @@
-# What is IaC?
+# Introduction
 
 _Infrastructure as Code_ it is the process of managing infrastructure in a file or files rather than manually configuring resources in a user interface. A resource in this instance is any piece of infrastructure in a given environment, such as a virtual machine, security group, network interface, etc.
 
@@ -15,10 +15,49 @@ The infrastructure Terraform can manage includes low-level components such as co
 Terraform creates and manages resources on cloud platforms and other services through their application programming interfaces (APIs). Providers enable Terraform to work with virtually any platform or service with an accessible API.
 <img src="https://miro.medium.com/max/1400/1*A1PWiPFasWKNePCgL6N_Cg.png" width="900"/>[^1]
 
+## Configuration language
+The main purpose of the Terraform language is declaring resources, which represent infrastructure objects. All other language features exist only to make the definition of resources more flexible and convenient.
+
+A Terraform configuration is a complete document in the Terraform language (Hashicorp Configuration Language (HCL)) that tells Terraform how to manage a given collection of infrastructure. A configuration can consist of multiple files and directories.
+
+The syntax of the Terraform language consists of only a few basic elements:
+- **Blocks** are containers for other content and usually represent the configuration of some kind of object, like a resource. Blocks have a block type, can have zero or more labels, and have a body that contains any number of arguments and nested blocks. Most of Terraform's features are controlled by top-level blocks in a configuration file.
+- **Arguments** assign a value to a name. They appear within blocks.
+- **Expressions** represent a value, either literally or by referencing and combining other values. They appear as values for arguments, or within other expressions.
+
+These elements are structured as follows
+```
+<BLOCK TYPE> "<BLOCK LABEL>" "<BLOCK LABEL>" {
+  # Block body
+  <IDENTIFIER> = <EXPRESSION> # Argument
+}
+```
+
+Example:
+```
+resource "aws_vpc" "main" {
+  cidr_block = var.base_cidr_block
+}
+```
+
+The Terraform language is _declarative_, describing an intended goal rather than the steps to reach that goal. The ordering of blocks and the files they are organized into are generally not significant; Terraform only considers _implicit_ and _explicit_ relationships between resources when determining an order of operations.
+
+
+
 # Expressions
+Expressions are used to refer to or compute values within a configuration. The simplest expressions are just literal values, like "hello" or 5, but the Terraform language also allows more complex expressions such as references to data exported by resources, arithmetic, conditional evaluation, and a number of built-in functions.
+
+The result of an expression is a value. All values have a type, which dictates where that value can be used and what transformations can be applied to it.
+
 <img src="https://miro.medium.com/max/1400/1*RgNuNbnxCekhoIu-PgG-1Q.png" width="900"/>[^1]
 
-_String_, _Number_, _Boolean_, _List_, _Map_, _Tuple_ or _Object_. We can define a `default` value, for example:
+The Terraform language uses the following types for its values:
+- **Primitive types:** `string`, `number` and `boolean`. A primitive type is a simple type that isn't made from any other types. All primitive types in Terraform are represented by a type keyword. 
+- **Complex types:** A complex type is a type that groups multiple values into a single value. Complex types are represented by type constructors, but several of them also have shorthand keyword versions. There are two categories of complex types: collection types (for grouping similar values), and structural types (for grouping potentially dissimilar values).
+	- _Collection types:_ `list` and `map`. A collection type allows multiple values of one other type to be grouped together as a single value. The type of value within a collection is called its element type. All collection types must have an element type, which is provided as the argument to their constructor.
+	- _Structural types:_ `tuple` and `object`. A structural type allows multiple values of several distinct types to be grouped together as a single value. Structural types require a schema as an argument, to specify which types are allowed for which elements.
+
+We can define a `default` value for these types, for example:
 
 ```
 variable "vpcname" {
@@ -44,11 +83,12 @@ variable "sshport" {
 ```
 
 > **Note** 
-> Both _Number_ and _Integer_ don't need double quotes, but Terraform automatically converts _Number_ and _Boolean_ values to strings when needed. For example 5 and "5" both are correct.
+> A `number` does not need double quotes, Terraform automatically converts `number` and `boolean` values to strings when needed. For example 5 and "5" both are correct.
 
-## Variables type: List
-_List_ is the same than an array. We can store multiple values. **Remember the first value is the 0 position**. For example to access the 0 position is `var.mylist[0]`.
+## Complex type: List
+`list` is the same as an array, we can store multiple values. 
 
+Example:
 ```
 variable "mylist" {
     type = list(string)
@@ -56,9 +96,11 @@ variable "mylist" {
 }
 
 ```
+> **Note**
+> Remember the first value is the 0 position. For example, the 0 position can be accessed through the following command: `var.mylist[0]`.
 
-## Variables type: Map
-Is a Key:Value pair. We use the key to access to the value.
+## Complex type: Map
+`map` is a Key:Value pair. We use the key to access to the value. 
 
 ```
 variable "mymap" {
@@ -71,13 +113,13 @@ variable "mymap" {
 
 ```
 
-For example, if we need to access the value of Key1 (Value1) we can using the next example `var.mymap["Key1"]`
+For example, if we need to access the value of Key1 (Value1) we can use the the following command: `var.mymap["Key1"]`.
 
 > **Note** 
-> Remember, we use [ ] for list, and we use { } for maps
+> Remember, we use `[ ]` for `list`, and we use `{ }` for `map`.
 
-## Variables type: Tuple
-The difference between a _Tuple_ and a _List_, is on the _List_ we need to specified one type (string or numbers), and usingTtuple we can use multiple data-types
+## Complex type: Tuple
+The difference between a `tuple` and a `list`, is that for `list` we need to specify one dinstinct data type (`string` or `number`), whereas using `tuple` we are able to use multiple data types
 
 ```
 variable "mytuple" {
@@ -87,8 +129,8 @@ variable "mytuple" {
 
 ```
 
-## Variables type: Object
-Similarly, using _Object_ we can use multiple data-types instead of a specified one for _Map_
+## Complex type: Object
+Similarly, using `object` we can use multiple data types instead of a specified one for `map`
 
 ```
 variable "myobject" {
@@ -102,7 +144,7 @@ variable "myobject" {
 ```
 
 > **Note** 
-> Using objects and tuples allows us to have multiple values of several distinct types to be grouped as a single value.
+> Using `object` and `tuple` allows us to have multiple values of several distinct types to be grouped as a single value.
 
 # Blocks
 A block is a container for other content.
