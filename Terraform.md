@@ -674,6 +674,10 @@ USE AND CREATE MODULES
 
 A module is a simple directory that contains other .tf files. Using modules we can make the code reusable. Modules are local or remote.
 
+![](https://miro.medium.com/max/1400/1*ItQg-iUT0O3QDiLoJBndJg.png)
+![](https://miro.medium.com/max/1400/1*ilau3dR50ZfKadoc1_TO_w.png)
+Source: https://medium.com/@mfundo/terraform-modules-illustrate-26cbc48be83a
+
 #### TERRAFORM REGISTRY
 
 Is the place to find modules, theses modules are verified by Hashicorp
@@ -729,10 +733,31 @@ output "dbprivateip" {
 }
 
 ```
+![](https://miro.medium.com/max/1400/1*nC50N58BRmDPkIKGHQOqbA.png)
+Source: https://medium.com/@mfundo/terraform-modules-illustrate-26cbc48be83a
 
 #### CHILD MODULES
 
 Terraform allow having child modules, modules within modules. Basically is a directory with tf files, with others directories with others sub modules. After add a subdirectory, remember to execute again `terraform init`
+
+![](https://miro.medium.com/max/1400/1*7OER_lXpP-25B1LKW1lPOw.png)
+Source: https://medium.com/@mfundo/terraform-modules-illustrate-26cbc48be83a
+
+#### MODULE COMPOSITION
+The key features of modules are _Re-usability_ and _Composability_. Below are some patterns to keep in mind when creating flexible, re-usable and composable modules.
+
+Keep a flat tree of module calls: try to avoid having children modules that have their own children: The [Terraform documentation](https://www.terraform.io/language/modules/develop/composition#module-composition) recommends only one level of child modules.
+![](https://miro.medium.com/max/1400/1*N6YMOp-V3uQcF_sHFoztNA.png)
+Source: https://medium.com/@mfundo/terraform-modules-illustrate-26cbc48be83a
+
+Keep modules relatively small and pass in dependencies instead (_Dependency Inversion_).
+![](https://miro.medium.com/max/1400/1*VOG5X8xSEiFCoAFenQ66hQ.png)
+Source: https://medium.com/@mfundo/terraform-modules-illustrate-26cbc48be83a
+In the example above the network creation is separated from the redis module. This makes it easy for the resources defined by the module to coexist with other infrastructure in the same network.
+
+Avoid complex conditional branches when creating objects within modules. Using an input variable is more declarative.
+![](https://miro.medium.com/max/1400/1*expkYWhUbQfQLsOTYVXQxQ.png)
+Source: https://medium.com/@mfundo/terraform-modules-illustrate-26cbc48be83a
 
 READ AND WRITE CONFIGURATION
 ----------------------------
@@ -1010,7 +1035,7 @@ Link: <https://www.terraform.io/docs/commands/state/push.html>
 -   Standard: state management, storage and locking
 -   Enhanced: Only on Terraform Cloud, standard + can run operations remotely
 
-Note: Backend that support state lockings: Azurerm, Consul, S3
+Note: Backend that support state lockings: AzureRM, Consul, S3
 
 #### RECAP OF STATE
 
