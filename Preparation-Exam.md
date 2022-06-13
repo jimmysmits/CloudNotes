@@ -512,6 +512,92 @@ A `dynamic` block acts much like a `for` expression, but produces nested blo
 
 Link: <https://www.terraform.io/docs/configuration/expressions.html>
 
+## Modules
+
+A module is a simple directory that contains other .tf files. Using modules we can make the code reusable. Modules are local or remote.
+
+<img src="https://miro.medium.com/max/1400/1*ItQg-iUT0O3QDiLoJBndJg.png" width="600"/>[^2]
+<img src="https://miro.medium.com/max/1400/1*ilau3dR50ZfKadoc1_TO_w.png" width="600"/>[^2]
+
+### Terraform Registry
+
+<https://registry.terraform.io/> is the place to find modules, theses modules are verified by HashiCorp
+
+### Modules inputs/outputs
+
+For make modules inputs we use inputs variables. Example module code:
+
+```
+variable "dbname" {
+	type = string
+}
+resource "aws_instance" "myec2db" {
+	ami = "ami-01a6e"
+	tags = {
+		Name = var.dbname
+	}
+}
+
+```
+
+Call to the module example:
+
+```
+module "dbserver" {
+	source = "./db"
+	dbname = "mydbserver"
+}
+
+```
+
+Module outputs are very similar to module inputs, an example in a module output:
+
+```
+output "privateip" {
+	value = aws_instance.myec2db.private_ip
+}
+
+```
+
+When we use a module with an output, to use the output we need to specified in the call to our module, for example:
+
+```
+module "dbserver" {
+	source = "./db"
+	dbname = "mydbserver"
+}
+
+output "dbprivateip" {
+	value = module.dbserver.privateip
+}
+
+```
+<img src="https://miro.medium.com/max/1400/1*nC50N58BRmDPkIKGHQOqbA.png" width="700"/>[^2]
+
+### Child modules
+
+Terraform allows for _child modules_, modules within modules, so to say. This basically is a directory with .tf files, within other directories with others sub modules. After add a subdirectory, remember to execute again `terraform init`
+
+<img src="https://miro.medium.com/max/1400/1*7OER_lXpP-25B1LKW1lPOw.png" width="700"/>[^2]
+
+### Module compositions
+The key features of modules are _re-usability_ and _composability_. Below are some patterns to keep in mind when creating flexible, re-usable and composable modules.
+
+> Keep a flat tree of module calls. Try to avoid having children modules that have their own children: The [Terraform documentation](https://www.terraform.io/language/modules/develop/composition#module-composition) recommends only one level of child modules.
+
+<img src="https://miro.medium.com/max/1400/1*N6YMOp-V3uQcF_sHFoztNA.png" width="700"/>[^2]
+
+> Keep modules relatively small and pass in dependencies instead (_dependency inversion_).
+
+<img src="https://miro.medium.com/max/1400/1*VOG5X8xSEiFCoAFenQ66hQ.png" width="700"/>[^2]
+
+In the example above the network creation is separated from the redis module. This makes it easy for the resources defined by the module to coexist with other infrastructure in the same network.
+
+> Avoid complex conditional branches when creating objects within modules. Using an input variable is more declarative.
+
+<img src="https://miro.medium.com/max/1400/1*expkYWhUbQfQLsOTYVXQxQ.png" width="600"/>[^2]
+
+
 # Commands
 
 ## The core workflow
@@ -809,91 +895,6 @@ $ terraform state rm 'module.foo'
 
 Link: <https://www.terraform.io/docs/commands/state/rm.html>
 
-## Modules
-
-A module is a simple directory that contains other .tf files. Using modules we can make the code reusable. Modules are local or remote.
-
-<img src="https://miro.medium.com/max/1400/1*ItQg-iUT0O3QDiLoJBndJg.png" width="600"/>[^2]
-<img src="https://miro.medium.com/max/1400/1*ilau3dR50ZfKadoc1_TO_w.png" width="600"/>[^2]
-
-### Terraform Registry
-
-<https://registry.terraform.io/> is the place to find modules, theses modules are verified by HashiCorp
-
-### Modules inputs/outputs
-
-For make modules inputs we use inputs variables. Example module code:
-
-```
-variable "dbname" {
-	type = string
-}
-resource "aws_instance" "myec2db" {
-	ami = "ami-01a6e"
-	tags = {
-		Name = var.dbname
-	}
-}
-
-```
-
-Call to the module example:
-
-```
-module "dbserver" {
-	source = "./db"
-	dbname = "mydbserver"
-}
-
-```
-
-Module outputs are very similar to module inputs, an example in a module output:
-
-```
-output "privateip" {
-	value = aws_instance.myec2db.private_ip
-}
-
-```
-
-When we use a module with an output, to use the output we need to specified in the call to our module, for example:
-
-```
-module "dbserver" {
-	source = "./db"
-	dbname = "mydbserver"
-}
-
-output "dbprivateip" {
-	value = module.dbserver.privateip
-}
-
-```
-<img src="https://miro.medium.com/max/1400/1*nC50N58BRmDPkIKGHQOqbA.png" width="700"/>[^2]
-
-### Child modules
-
-Terraform allows for _child modules_, modules within modules, so to say. This basically is a directory with .tf files, within other directories with others sub modules. After add a subdirectory, remember to execute again `terraform init`
-
-<img src="https://miro.medium.com/max/1400/1*7OER_lXpP-25B1LKW1lPOw.png" width="700"/>[^2]
-
-### Module compositions
-The key features of modules are _re-usability_ and _composability_. Below are some patterns to keep in mind when creating flexible, re-usable and composable modules.
-
-> Keep a flat tree of module calls. Try to avoid having children modules that have their own children: The [Terraform documentation](https://www.terraform.io/language/modules/develop/composition#module-composition) recommends only one level of child modules.
-
-<img src="https://miro.medium.com/max/1400/1*N6YMOp-V3uQcF_sHFoztNA.png" width="700"/>[^2]
-
-> Keep modules relatively small and pass in dependencies instead (_dependency inversion_).
-
-<img src="https://miro.medium.com/max/1400/1*VOG5X8xSEiFCoAFenQ66hQ.png" width="700"/>[^2]
-
-In the example above the network creation is separated from the redis module. This makes it easy for the resources defined by the module to coexist with other infrastructure in the same network.
-
-> Avoid complex conditional branches when creating objects within modules. Using an input variable is more declarative.
-
-<img src="https://miro.medium.com/max/1400/1*expkYWhUbQfQLsOTYVXQxQ.png" width="600"/>[^2]
-
 
 # Built-in functions
 
@@ -931,23 +932,6 @@ Links:
 -   <https://www.terraform.io/docs/configuration/functions.html>
 -   <https://www.terraform.io/docs/configuration/expressions.html#function-calls>
 
-#### SECURING KEYS
-
-In the case of using AWS provider the best practice for store credentials is having the keys in the AWS config file `.aws/credentials`, and not having the credentials in the Terraform code
-
-#### SENTINEL
-
-[Sentinel](https://www.hashicorp.com/sentinel) is an embedded policy-as-code framework integrated with the HashiCorp Enterprise products. It enables fine-grained, logic-based policy decisions, and can be extended to use information from external sources.
-
-#### SECRET INJECTION
-
-Vault allows you to manage secrets and protect sensitive data. Secure, store and tightly control access to tokens, passwords, certificates, encryption keys for protecting secrets and other sensitive data using a UI, CLI, or HTTP API.
-
-#### FILES TO UPLOAD
-
-The following Terraform files should be ignored by Git when committing code to a repo:
-
-The `terraform.tfstate` or `.auto.tfvars` files contains the terraform state of a specific environment and doesn't need to be preserved in a repo. The `terraform.tfvars` file may contain sensitive data, such as passwords or IP addresses of an environment that you may not want to share with others.
 
 # State
 
@@ -1146,6 +1130,24 @@ Sentinel, VCS Integration are offered also in Terraform Cloud. Everything that i
 
 # Appendix
 
+#### SECURING KEYS
+
+In the case of using AWS provider the best practice for store credentials is having the keys in the AWS config file `.aws/credentials`, and not having the credentials in the Terraform code
+
+#### SENTINEL
+
+[Sentinel](https://www.hashicorp.com/sentinel) is an embedded policy-as-code framework integrated with the HashiCorp Enterprise products. It enables fine-grained, logic-based policy decisions, and can be extended to use information from external sources.
+
+#### SECRET INJECTION
+
+Vault allows you to manage secrets and protect sensitive data. Secure, store and tightly control access to tokens, passwords, certificates, encryption keys for protecting secrets and other sensitive data using a UI, CLI, or HTTP API.
+
+#### FILES TO UPLOAD
+
+The following Terraform files should be ignored by Git when committing code to a repo:
+
+The `terraform.tfstate` or `.auto.tfvars` files contains the terraform state of a specific environment and doesn't need to be preserved in a repo. The `terraform.tfvars` file may contain sensitive data, such as passwords or IP addresses of an environment that you may not want to share with others.
+
 ## Debugging in Terraform
 
 Terraform has detailed logs which can be enabled by setting the `TF_LOG` environment variable to any value. This will cause detailed logs to appear on stderr.
@@ -1170,7 +1172,7 @@ Link: <https://www.terraform.io/docs/internals/debugging.html>
 
 -   Terraform Enterprise requires a PostgresSQL for a clustered deployment.
 
--   Some Bbckends supported: (1) Terraform Enterprise, (2) Consul, (3) AWS S3, (4) Artifactory.
+-   Some backends supported: (1) Terraform Enterprise, (2) Consul, (3) AWS S3, (4) Artifactory.
 
 -   Terraform Cloud supports the following VCS providers: GitHub, Gitlab, Bitbucket and Azure DevOps
 
