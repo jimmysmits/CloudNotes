@@ -69,7 +69,7 @@ variable "mylist" {
 
 ```
 
-#### Variables type: Map
+##### Variables type: Map
 
 Is a Key:Value pair. We use the key to access to the value.
 
@@ -87,6 +87,35 @@ variable "mymap" {
 _Important:_ For example, if we need to access the value of Key1 (Value1) we can using the next example `var.mymap["Key1"]`
 
 🗒️: Remember, we use [ ] for list, and we use { } for maps
+
+##### Variable type: Tuple
+
+The difference between a _Tuple_ and a _List_, is on the _List_ we need to specified one type (string or numbers), and usingTtuple we can use multiple data-types
+
+```
+variable "mytuple" {
+    type = tuple([string, number, string])
+    default = ["cat", 1, "dog"]
+}
+
+```
+
+##### Variable type: Object
+
+Similarly, using _Object_ we can use multiple data-types instead of a specified one for _Map_
+
+```
+variable "myobject" {
+    type = object({name = string, port = list(number)})
+    default = {
+        name = "TJ"
+        port = [22, 25, 80]
+    }
+}
+
+```
+
+🗒️: Using objects and tuples allows us to have multiple values of several distinct types to be grouped as a single value.
 
 #### Input variables
 
@@ -371,7 +400,7 @@ Links:
 -   <https://www.terraform.io/docs/provisioners/local-exec.html>
 -   <https://www.terraform.io/docs/provisioners/remote-exec.html>
 
-MASTER THE WORKFLOW[^1]
+THE CORE WORKFLOW[^1]
 -------------------
 
 3 types of users, the workflow change according to the user
@@ -773,36 +802,8 @@ A `dynamic` block acts much like a `for` expression, but produces nested blo
 
 Link: <https://www.terraform.io/docs/configuration/expressions.html>
 
-#### TUPLES
 
-The difference between a tuple and a list, is on the list we need to specified one type (string or numbers), and using tuple we can use multiple data-types
-
-```
-variable "mytuple" {
-    type = tuple([string, number, string])
-    default = ["cat", 1, "dog"]
-}
-
-```
-
-#### OBJECTS
-
-Is the same case of tuples with list, but in this case is with maps. Using Objects we can use multiple data-types
-
-```
-variable "myobject" {
-    type = object({name = string, port = list(number)})
-    default = {
-        name = "TJ"
-        port = [22, 25, 80]
-    }
-}
-
-```
-
-🗒️: Using objects and tuples allows us to have multiple values of several distinct types to be grouped as a single value.
-
-#### DEPENDENCIES
+#### Dependencies
 
 Explicitly specifying a dependency is only necessary when a resource relies on some other resource's behavior but *doesn't* access any of that resource's data in its arguments.
 
@@ -817,7 +818,7 @@ resource "aws_instance" "example" {
 
 The `depends_on` meta-argument, if present, must be a list of references to other resources in the same module.
 
-#### DATA SOURCES
+#### Data sources
 
 Data Sources are the way Terraform can query AWS and return results (Api request to get information)
 
@@ -847,7 +848,7 @@ A data block request that Terraform read from a given data source and export the
 
 Link: <https://www.terraform.io/docs/providers/aws/d/instance.html>
 
-#### BUILT-IN FUNCTIONS
+#### Built-in functions
 
 The Terraform language includes a number of built-in functions that you can call from within expressions to transform and combine values. The general syntax for function calls is a function name followed by comma-separated arguments in parentheses:
 
@@ -900,10 +901,9 @@ The following Terraform files should be ignored by Git when committing code to a
 
 The `terraform.tfstate` or `.auto.tfvars` files contains the terraform state of a specific environment and doesn't need to be preserved in a repo. The `terraform.tfvars` file may contain sensitive data, such as passwords or IP addresses of an environment that you may not want to share with others.
 
-MANAGE STATE
-------------
+# Managing state
 
-#### LOCAL STATE
+#### Local state
 
 The local backend stores state on the local filesystem, locks that state using system APIs, and performs operations locally.
 
@@ -916,15 +916,15 @@ terraform {
 
 ```
 
-#### PARTIAL CONFIGURATION
+#### Partial configuration
 
 You do not need to specify every required argument in the backend configuration. Omitting certain arguments may be desirable to avoid storing secrets, such as access keys, within the main configuration. When some or all of the arguments are omitted, we call this a *partial configuration*.
 
 With a partial configuration, the remaining configuration arguments must be provided as part of [the initialization process](https://www.terraform.io/docs/backends/init.html#backend-initialization). There are several ways to supply the remaining arguments:
 
--   Interactively: Terraform will interactively ask you for the required values
--   File: A configuration file may be specified via the `init` command line. To specify a file, use the `-backend-config=PATH` option when running `terraform init`
--   Command-line key/value pairs: Key/value pairs can be specified via the `init` command line.
+-   _Interactively:_ Terraform will interactively ask you for the required values
+-   _File:_ A configuration file may be specified via the `init` command line. To specify a file, use the `-backend-config=PATH` option when running `terraform init`
+-   _Command-line key/value pairs:_ Key/value pairs can be specified via the `init` command line.
 
 #### TERRAFORM REFRESH
 
@@ -1031,8 +1031,7 @@ Link: <https://www.terraform.io/docs/commands/state/push.html>
 -   Terraform refresh will attempt to resync the state
 -   Terraform state push will override the state
 
-DEBUG IN TERRAFORM
-------------------
+# Debugging in Terraform
 
 Terraform has detailed logs which can be enabled by setting the `TF_LOG` environment variable to any value. This will cause detailed logs to appear on stderr.
 
@@ -1049,22 +1048,21 @@ You can set `TF_LOG` to one of the log levels `TRACE`, `DEBUG`, `INFO`, `W
 
 Link: <https://www.terraform.io/docs/internals/debugging.html>
 
-UNDERSTAND TERRAFORM CLOUD AND ENTERPRISE
------------------------------------------
+# Terraform Cloud & Enterprise
 
-#### TERRAFORM CLOUD
+#### Terraform Cloud
 
 Terraform Cloud (TFC) is a free to use, self-service SaaS platform that extends the capabilities of the open source Terraform CLI and adds collaboration and automation features.
 
 Terraform Cloud enables connecting to common VCS platforms (GitHub, GitLab, Bitbucket) and triggering Terraform runs (plan and apply) from changes to configuration within the VCS. TFC manages state for the user, including keeping a history of changes. Terraform Cloud exposes an HTTP API that anyone can integrate with to build more automation around infrastructure change.
 
-#### TERRAFORM CLOUD SETUP
+#### Terraform Cloud set-up
 
 First we need to create an account on <https://app.terraform.io/signup/account> and create a new Git repository, and upload our `.tf` files.
 
-After that on Terraform Cloud web page we need to create an Organization, only we need to specified the name, and one email address, after that we can connect to our Git repository (Github, Gitlab, Bitbucket and Azure DevOps are available), also we need to authorize Terraform Cloud in our Git repository, is only one click.
+After that on Terraform Cloud web page we need to create an Organization, only we need to specified the name, and one email address, after that we can connect to our Git repository (GitHub, GitLab, Bitbucket and Azure DevOps are available), also we need to authorize Terraform Cloud in our Git repository, is only one click.
 
-Also we can implement a Private module registry in Terraform Cloud.
+Also, we can implement a Private module registry in Terraform Cloud.
 
 Now we need to create a Workspace on Terraform Cloud (is different to the Workspace on Terraform), this is for create a separate environment, for example dev, prod, etc.
 
@@ -1078,20 +1076,20 @@ For the last, we need to configure a Queue Plan, this allow us to execute a `Te
 
 🗒️: Terraform Cloud always encrypts state at rest and protects it with TLS in transit.
 
-#### TERRAFORM CLOUD DESTROY
+#### Terraform Cloud
 
 If we want to do a Destroy, we only need to click on the option "Queue destroy plan"
 
-#### TERRAFORM CLOUD COMPARISON OSS VS CLOUD
+#### OSS vs. Terraform Cloud
 
-| Component | Local Terraform | Terraform Cloud |
+| Component | OSS| Terraform Cloud |
 | --- | --- | --- |
 | Terraform Configuration | On Disk | In linked version control repository, or periodically updated via API/CLI |
 | Variable values | As .tfvars file, as CLI arguments, or in shell environment | In workspace |
 | State | On disk or in remote backend | In workspace |
 | Credential and secrets | In shell environment or entered at prompts | In workspace, stored as sensitive variables |
 
-#### TERRAFORM CLOUD PAID FEATURES
+#### Terraform Cloud: Paid features
 
 Some paid features are Roles & Team management, Cost Estimation and Sentinel.
 
@@ -1099,7 +1097,7 @@ Up to 5 users we can have the free tier, with VCS integration, Workspace Managem
 
 Link: <https://www.hashicorp.com/products/terraform/pricing/>
 
-#### TERRAFORM CLOUD COMPARISON CLOUD VS ENTERPRISE
+#### Terraform Cloud vs. Terraform Enterprise
 
 Terraform Enterprise is a hosted version of Terraform Cloud, but using Terraform Enterprise we can have the following features:
 
@@ -1113,8 +1111,7 @@ Terraform Enterprise is a hosted version of Terraform Cloud, but using Terraform
 
 Sentinel, VCS Integration are offered also in Terraform Cloud. Everything that is in Terraform Cloud is already included in Terraform Enterprise.
 
-EXTRA NOTES
------------
+# Appendix
 
 -   A Terraform Enterprise install that is provisioned on a network that does not have Internet access is generally known as an air-gapped install. These types of installs require you to pull updates, providers, etc. from external sources vs. being able to download them directly.
 
