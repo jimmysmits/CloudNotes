@@ -111,39 +111,6 @@ variable "myobject" {
 # Blocks
 <img src="https://miro.medium.com/max/1400/1*b8enCRGjvJkO6texZBnEfg.png" width="600"/>[^1]
 
-## Terraform Settings
-<img src="https://miro.medium.com/max/1400/1*3nnDHIS3zQ2W0CsGCjsHvQ.png" width="800"/>[^1]
-
-### Versioning
-
-The `required_version` setting can be used to constrain which versions of the Terraform CLI can be used with your configuration. If the running version of Terraform doesn't match the constraints specified, Terraform will produce an error and exit without taking any further actions.
-
-```
-terraform {
-  required_version = ">= 0.12"
-}
-
-```
-
-The value for `required_version` is a string containing a comma-separated list of constraints. Each constraint is an operator followed by a version number, such as `> 0.12.0`. The following constraint operators are allowed:
-
--   [`=`](https://www.terraform.io/docs/configuration/terraform.html#) (or no operator): exact version equality
--   [`!=`](https://www.terraform.io/docs/configuration/terraform.html#-1): version not equal
--   [`>`](https://www.terraform.io/docs/configuration/terraform.html#gt-), `>=`, `<`, `<=`: version comparison, where "greater than" is a larger version number
--   [`~>`](https://www.terraform.io/docs/configuration/terraform.html#gt--1): pessimistic constraint operator, constraining both the oldest and newest version allowed. For example, `~> 0.9` is equivalent to `>= 0.9, < 1.0`, and `~> 0.8.4`, is equivalent to `>= 0.8.4, < 0.9`
-
-We can also specified a provider version requirement
-
-```
-provider "aws" {
-	region = "us-east-1"
-	version = ">= 2.9.0"
-}
-
-```
-
-Link: <https://www.terraform.io/docs/configuration/terraform.html#specifying-a-required-terraform-version>
-
 ## (Input) Variables & Values
 <img src="https://miro.medium.com/max/1400/1*_FWwGch6_ettk6ZvYPYwAw.png" width="800"/>[^1]
 
@@ -268,57 +235,6 @@ terraform plan -var-file=prod.tfvars
 > **Note** 
 > There is no mention of .tf file declaration in there, this is because variables declared in .tf files are concatenated into a single entity consisting of your variables.tf your main.tf and your output.tf files before being processed by Terraform. Hence this declaration have highest precedence in order of application.
 
-## Providers
-
-A provider is responsible for understanding API interactions and exposing resources. If an API is available, you can create a provider. A provider user a plugin. In order to make a provider available on Terraform, we need to make a `terraform init`, this commands download any plugins we need for our providers. If for example we need to copy the plugin directory manually, we can do it, moving the files to `.terraform.d/plugins`
-
-> **Note** 
-> Using `terraform providers` command we can view the specified version constraints for all providers used in the current configuration
-
-<img src="https://miro.medium.com/max/1400/1*Vyb5RNl3PhxytQsD0vaH-w.png" width="800"/>[^1]
-
-Example configuration:
-
-```
-terraform {
-  required_providers {
-    aws = "~> 2.7"
-  }
-}
-
-```
-
-Check:
-
-```
-$ terraform providers
-.
-└── provider.aws ~> 2.7
-
-```
-
-When `terraform init` is re-run with providers already installed, it will use an already-installed provider that meets the constraints in preference to downloading a new version. To upgrade to the latest acceptable version of each provider, run `terraform init -upgrade`. This command also upgrades to the latest versions of all Terraform modules.
-
-### Multi-provider set-up
-
-We can use for example multiple AWS providers with different regions, for this we need to create an `alias` and on the resource creation we need to specified the provider. For example
-
-```
-provider "aws" {
-	region = "us-east-1"
-}
-
-provider "aws" {
-	region = "us-west-1"
-	alias = "ireland"
-}
-
-resource "aws_vpc" "irlvpc" {
-	cidr_block = "10.0.0.0/16"
-	provider   = "aws.ireland"
-}
-
-```
 ## Resources
 Resources are the most important element in the Terraform language. Each resource block describes one or more infrastructure objects, such as virtual networks, compute instances, or higher-level components such as DNS records. For example:
 
@@ -349,6 +265,23 @@ The following meta-arguments are documented on separate pages:
 - `provider`, for selecting a non-default provider configuration
 - `lifecycle`, for lifecycle customizations
 - `provisioner`, for taking extra actions after resource creation
+
+#### Dependencies
+
+Explicitly specifying a dependency is only necessary when a resource relies on some other resource's behavior but *doesn't* access any of that resource's data in its arguments.
+
+```
+resource "aws_instance" "example" {
+  ami           = "ami-a1b2c3d4"
+  instance_type = "t2.micro"
+  depends_on = [aws_iam_role_policy.example]
+}
+
+```
+
+The `depends_on` meta-argument, if present, must be a list of references to other resources in the same module.
+
+Link: <https://www.terraform.io/docs/providers/aws/d/instance.html>
 
 #### Provisioners
 
@@ -435,6 +368,149 @@ Links:
 
 -   <https://www.terraform.io/docs/provisioners/local-exec.html>
 -   <https://www.terraform.io/docs/provisioners/remote-exec.html>
+
+## Providers
+
+A provider is responsible for understanding API interactions and exposing resources. If an API is available, you can create a provider. A provider user a plugin. In order to make a provider available on Terraform, we need to make a `terraform init`, this commands download any plugins we need for our providers. If for example we need to copy the plugin directory manually, we can do it, moving the files to `.terraform.d/plugins`
+
+> **Note** 
+> Using `terraform providers` command we can view the specified version constraints for all providers used in the current configuration
+
+<img src="https://miro.medium.com/max/1400/1*Vyb5RNl3PhxytQsD0vaH-w.png" width="800"/>[^1]
+
+Example configuration:
+
+```
+terraform {
+  required_providers {
+    aws = "~> 2.7"
+  }
+}
+
+```
+
+Check:
+
+```
+$ terraform providers
+.
+└── provider.aws ~> 2.7
+
+```
+
+When `terraform init` is re-run with providers already installed, it will use an already-installed provider that meets the constraints in preference to downloading a new version. To upgrade to the latest acceptable version of each provider, run `terraform init -upgrade`. This command also upgrades to the latest versions of all Terraform modules.
+
+### Multi-provider set-up
+
+We can use for example multiple AWS providers with different regions, for this we need to create an `alias` and on the resource creation we need to specified the provider. For example
+
+```
+provider "aws" {
+	region = "us-east-1"
+}
+
+provider "aws" {
+	region = "us-west-1"
+	alias = "ireland"
+}
+
+resource "aws_vpc" "irlvpc" {
+	cidr_block = "10.0.0.0/16"
+	provider   = "aws.ireland"
+}
+
+```
+
+## Data sources
+
+Data Sources are the way Terraform can query AWS and return results (Api request to get information)
+
+Use of data sources allows a Terraform configuration to make use of information defined outside of Terraform, or defined by another separate Terraform configuration.
+
+For example we can information to an EC2 created on AWS without being created using Terraform,
+
+Example using a data source to know the AZ of an Instance created without Terraform, a print on the output command.
+
+```
+# Find the latest available AMI that is tagged with Component = "DB server"
+data "aws_instance" "dbsearch" {
+filter {
+	name = "tag:Name"
+	values = ["DB server"]
+ }
+}
+output "dbserver" {
+ value = data.aws_instance.dbsearch.availability_zone
+}
+
+```
+
+A data block request that Terraform read from a given data source and export the result under the give local name.
+
+> **Note**
+> Data source attributes are interpolated with the general syntax *data.TYPE.NAME.ATTRIBUTE*. The interpolation for a resource is the same but without the *data.* prefix (TYPE.NAME.ATTRIBUTE).
+
+
+## Terraform Settings
+<img src="https://miro.medium.com/max/1400/1*3nnDHIS3zQ2W0CsGCjsHvQ.png" width="800"/>[^1]
+
+### Versioning
+
+The `required_version` setting can be used to constrain which versions of the Terraform CLI can be used with your configuration. If the running version of Terraform doesn't match the constraints specified, Terraform will produce an error and exit without taking any further actions.
+
+```
+terraform {
+  required_version = ">= 0.12"
+}
+
+```
+
+The value for `required_version` is a string containing a comma-separated list of constraints. Each constraint is an operator followed by a version number, such as `> 0.12.0`. The following constraint operators are allowed:
+
+-   [`=`](https://www.terraform.io/docs/configuration/terraform.html#) (or no operator): exact version equality
+-   [`!=`](https://www.terraform.io/docs/configuration/terraform.html#-1): version not equal
+-   [`>`](https://www.terraform.io/docs/configuration/terraform.html#gt-), `>=`, `<`, `<=`: version comparison, where "greater than" is a larger version number
+-   [`~>`](https://www.terraform.io/docs/configuration/terraform.html#gt--1): pessimistic constraint operator, constraining both the oldest and newest version allowed. For example, `~> 0.9` is equivalent to `>= 0.9, < 1.0`, and `~> 0.8.4`, is equivalent to `>= 0.8.4, < 0.9`
+
+We can also specified a provider version requirement
+
+```
+provider "aws" {
+	region = "us-east-1"
+	version = ">= 2.9.0"
+}
+
+```
+
+Link: <https://www.terraform.io/docs/configuration/terraform.html#specifying-a-required-terraform-version>
+
+## Dynamic blocks
+
+Within top-level block constructs like resources, expressions can usually be used only when assigning a value to an argument using the `name = expression` form. This covers many uses, but some resource types include repeatable *nested blocks* in their arguments.
+
+You can dynamically construct repeatable nested blocks like `setting` using a special `dynamic` block type, which is supported inside `resource`, `data`, `provider`, and `provisioner` blocks:
+
+```
+resource "aws_elastic_beanstalk_environment" "tfenvtest" {
+  name                = "tf-test-name"
+  application         = "${aws_elastic_beanstalk_application.tftest.name}"
+  solution_stack_name = "64bit Amazon Linux 2018.03 v2.11.4 running Go 1.12.6"
+
+  dynamic "setting" {
+    for_each = var.settings
+    content {
+      namespace = setting.value["namespace"]
+      name = setting.value["name"]
+      value = setting.value["value"]
+    }
+  }
+}
+
+```
+
+A `dynamic` block acts much like a `for` expression, but produces nested blocks instead of a complex typed value. It iterates over a given complex value, and generates a nested block for each element of that complex value.
+
+Link: <https://www.terraform.io/docs/configuration/expressions.html>
 
 # Commands
 
@@ -740,11 +816,11 @@ A module is a simple directory that contains other .tf files. Using modules we c
 <img src="https://miro.medium.com/max/1400/1*ItQg-iUT0O3QDiLoJBndJg.png" width="600"/>[^2]
 <img src="https://miro.medium.com/max/1400/1*ilau3dR50ZfKadoc1_TO_w.png" width="600"/>[^2]
 
-### TERRAFORM REGISTRY
+### Terraform Registry
 
 <https://registry.terraform.io/> is the place to find modules, theses modules are verified by HashiCorp
 
-### MODULES INPUTS/OUTPUTS
+### Modules inputs/outputs
 
 For make modules inputs we use inputs variables. Example module code:
 
@@ -795,14 +871,14 @@ output "dbprivateip" {
 ```
 <img src="https://miro.medium.com/max/1400/1*nC50N58BRmDPkIKGHQOqbA.png" width="700"/>[^2]
 
-### CHILD MODULES
+### Child modules
 
-Terraform allow having child modules, modules within modules. Basically is a directory with tf files, with others directories with others sub modules. After add a subdirectory, remember to execute again `terraform init`
+Terraform allows for _child modules_, modules within modules, so to say. This basically is a directory with .tf files, within other directories with others sub modules. After add a subdirectory, remember to execute again `terraform init`
 
 <img src="https://miro.medium.com/max/1400/1*7OER_lXpP-25B1LKW1lPOw.png" width="700"/>[^2]
 
-### MODULE COMPOSITION
-The key features of modules are _re-usability_ and _Ccmposability_. Below are some patterns to keep in mind when creating flexible, re-usable and composable modules.
+### Module compositions
+The key features of modules are _re-usability_ and _composability_. Below are some patterns to keep in mind when creating flexible, re-usable and composable modules.
 
 > Keep a flat tree of module calls. Try to avoid having children modules that have their own children: The [Terraform documentation](https://www.terraform.io/language/modules/develop/composition#module-composition) recommends only one level of child modules.
 
@@ -818,81 +894,6 @@ In the example above the network creation is separated from the redis module. Th
 
 <img src="https://miro.medium.com/max/1400/1*expkYWhUbQfQLsOTYVXQxQ.png" width="600"/>[^2]
 
-
-## DYNAMIC BLOCKS
-
-Within top-level block constructs like resources, expressions can usually be used only when assigning a value to an argument using the `name = expression` form. This covers many uses, but some resource types include repeatable *nested blocks* in their arguments.
-
-You can dynamically construct repeatable nested blocks like `setting` using a special `dynamic` block type, which is supported inside `resource`, `data`, `provider`, and `provisioner` blocks:
-
-```
-resource "aws_elastic_beanstalk_environment" "tfenvtest" {
-  name                = "tf-test-name"
-  application         = "${aws_elastic_beanstalk_application.tftest.name}"
-  solution_stack_name = "64bit Amazon Linux 2018.03 v2.11.4 running Go 1.12.6"
-
-  dynamic "setting" {
-    for_each = var.settings
-    content {
-      namespace = setting.value["namespace"]
-      name = setting.value["name"]
-      value = setting.value["value"]
-    }
-  }
-}
-
-```
-
-A `dynamic` block acts much like a `for` expression, but produces nested blocks instead of a complex typed value. It iterates over a given complex value, and generates a nested block for each element of that complex value.
-
-Link: <https://www.terraform.io/docs/configuration/expressions.html>
-
-
-### Dependencies
-
-Explicitly specifying a dependency is only necessary when a resource relies on some other resource's behavior but *doesn't* access any of that resource's data in its arguments.
-
-```
-resource "aws_instance" "example" {
-  ami           = "ami-a1b2c3d4"
-  instance_type = "t2.micro"
-  depends_on = [aws_iam_role_policy.example]
-}
-
-```
-
-The `depends_on` meta-argument, if present, must be a list of references to other resources in the same module.
-
-## Data sources
-
-Data Sources are the way Terraform can query AWS and return results (Api request to get information)
-
-Use of data sources allows a Terraform configuration to make use of information defined outside of Terraform, or defined by another separate Terraform configuration.
-
-For example we can information to an EC2 created on AWS without being created using Terraform,
-
-Example using a data source to know the AZ of an Instance created without Terraform, a print on the output command.
-
-```
-# Find the latest available AMI that is tagged with Component = "DB server"
-data "aws_instance" "dbsearch" {
-filter {
-	name = "tag:Name"
-	values = ["DB server"]
- }
-}
-output "dbserver" {
- value = data.aws_instance.dbsearch.availability_zone
-}
-
-```
-
-A data block request that Terraform read from a given data source and export the result under the give local name.
-
-> **Note**
-> Data source attributes are interpolated with the general syntax *data.TYPE.NAME.ATTRIBUTE*. The interpolation for a resource is the same but without the *data.* prefix (TYPE.NAME.ATTRIBUTE).
-
-Link: <https://www.terraform.io/docs/providers/aws/d/instance.html>
 
 # Built-in functions
 
