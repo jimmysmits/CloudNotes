@@ -162,26 +162,16 @@ var.inputname
 ```
 
 #### Assigning Values to Root Module Variables
-When variables are declared in the root module of your configuration, they can be set in a number of ways:
-
-- In a Terraform Cloud workspace.
-- Individually, with the `-var` command line option.
-- In variable definitions (`.tfvars`) files, either specified on the command line or automatically loaded.
-- As environment variables.
-
-##### Environment variables
-
-We can create an export with our variable before execute `terraform plan`, and overwrite the value on the .tf files, for example `export TF_VAR_vpcname=envvpc`. This is useful for pass secrets or sensitive information in a secure form.
+When variables are declared in the root module of your configuration, they can be set in a number of ways: (1) in a Terraform Cloud workspace, (2) individually, with the `-var` command line option, (3) in variable definitions (`.tfvars`) files, (3a) either specified on the command line or (3b) automatically loaded or (4) as environment variables.
 
 <img src="https://miro.medium.com/max/1400/1*a1XXIztHa2Et_g-pSftDSw.png" width="800"/>[^1]
 
-##### CLI variables
 
-Another way to set variables is by using the command-line, for example `terraform plan -var="vpcname=cliname"`
+##### The `-var` command line option
+To specify individual variables on the command line, use the -var option when running the `terraform plan` and `terraform apply` commands, for example `terraform plan -var="vpcname=cliname"`.
 
-##### TFVARS files
-
-Passing variables inside a file, this is possible create a file called `terraform.tfvars` this file can be in a yaml or json notation, and is very simple, and also we can add maps, for example:
+##### Variable definitions (`.tfvars`) files: via command line
+Passing variables inside a file, this is possible create a file called `terraform.tfvars` this file can be in a .yaml or .json notation, and is very simple, and also we can add maps, for example:
 
 ```
 vpcname = "tfvarsname"
@@ -194,26 +184,30 @@ policy = {
 ```
 
 > **Note** 
+> This is how Terraform Cloud passes workspace variables to Terraform.
+
+> **Note** 
 > The `terraform.tfvars` file is used to define variables and the `.tf` file declare that the variable exists.
 
 Link: <https://amazicworld.com/difference-between-variable-tf-and-variable-tfvars-in-terraform>
 
-### AUTO TFVARS
+##### Variable definitions (`.tfvars`) files: automatically loaded
 
 This is for example using a file called `dev.auto.tfvars` (is the next file that look after look in the terraform.tfvars)
 
-### MULTIPLE VALUE FILES
-
-We can create a specified `*.tvars` file and load for example with `terraform plan`, this is very useful to settings variables for different environments.
+We can create a specified `*.tvars` file and load for example with `terraform plan`, this is very useful fir setting variables for different environments.
 
 ```
 terraform plan -var-file=prod.tfvars
 
 ```
 
-### Load order
+##### Environment variables
+As a fallback for the other ways of defining variables, Terraform searches the environment of its own process for environment variables named `TF_VAR_...` followed by the name of a declared variable. We can create an export with our variable before execute `terraform plan`, and overwrite the value on the .tf files, for example `export TF_VAR_vpcname=envvpc`. This is useful to pass secrets or sensitive information in a secure way.
 
--   Any -var and -var-file options on the command line, in order they are provided. (This includes variables set by a Terraform Cloud workspace.)
+##### Load order
+
+-   Any -var and -var-file options on the command line, in order they are provided (this includes variables set by a Terraform Cloud workspace).
 -   Any *.auto.tfvars or *.auto.tfvars.json files, processed in lexical order of their filenames.
 -   The tfvars.jsonfile, if present. `terraform.tfvars.json`
 -   The tfvarsfile, if present. `terraform.tfvars`
@@ -990,7 +984,7 @@ With a partial configuration, the remaining configuration arguments must be prov
 
 -   _Interactively:_ Terraform will interactively ask you for the required values
 -   _File:_ A configuration file may be specified via the `init` command line. To specify a file, use the `-backend-config=PATH` option when running `terraform init`
--   _Command-line key/value pairs:_ Key/value pairs can be specified via the `init` command line.
+-   _Command line key/value pairs:_ Key/value pairs can be specified via the `init` command line.
 
 ## terraform refresh
 
