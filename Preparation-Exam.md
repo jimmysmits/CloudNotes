@@ -526,15 +526,12 @@ resource "aws_elastic_beanstalk_environment" "tfenvtest" {
 A `dynamic` block acts much like a `for` expression, but produces nested blocks instead of a complex typed value. It iterates over a given complex value, and generates a nested block for each element of that complex value.
 
 ## Modules
-
-A module is a simple directory that contains other `.tf` files. Using modules we can make the code reusable. Modules are local or remote.
+Modules are self-contained packages of Terraform configurations that are managed as a group. A module is a simple directory that contains other `.tf` files. Using modules we can make our code re-usable. Modules are either local or remote.
 
 <img src="https://miro.medium.com/max/1400/1*ItQg-iUT0O3QDiLoJBndJg.png" width="600"/>[^2]
 <img src="https://miro.medium.com/max/1400/1*ilau3dR50ZfKadoc1_TO_w.png" width="600"/>[^2]
 
-### Terraform Registry
-
-<https://registry.terraform.io/> is the place to find modules, theses modules are verified by HashiCorp
+Modules can be found on [Terraform Registry](https://registry.terraform.io/browse/modules), theses modules are verified by HashiCorp
 
 ### Modules inputs/outputs
 For make modules inputs we use inputs variables. 
@@ -553,7 +550,6 @@ resource "aws_instance" "myec2db" {
 ```
 
 Call to the module example:
-
 ```
 module "dbserver" {
 	source = "./db"
@@ -562,7 +558,6 @@ module "dbserver" {
 ```
 
 Module outputs are very similar to module inputs, an example in a module output:
-
 ```
 output "privateip" {
 	value = aws_instance.myec2db.private_ip
@@ -570,7 +565,6 @@ output "privateip" {
 ```
 
 When we use a module with an output, to use the output we need to specified in the call to our module, for example:
-
 ```
 module "dbserver" {
 	source = "./db"
@@ -584,8 +578,7 @@ output "dbprivateip" {
 <img src="https://miro.medium.com/max/1400/1*nC50N58BRmDPkIKGHQOqbA.png" width="800"/>[^2]
 
 ### Child modules
-
-Terraform allows for _child modules_, modules within modules, so to say. This basically is a directory with .tf files, within other directories with others sub modules. After add a subdirectory, remember to execute again `terraform init`
+Terraform allows for _child modules_, modules within modules, so to say. This basically is a directory with `.tf` files, within other directories with others sub modules. After creating a subdirectory, remember to re-run the `terraform init` command.
 
 <img src="https://miro.medium.com/max/1400/1*7OER_lXpP-25B1LKW1lPOw.png" width="800"/>[^2]
 
@@ -606,25 +599,22 @@ In the example above the network creation is separated from the redis module. Th
 
 <img src="https://miro.medium.com/max/1400/1*expkYWhUbQfQLsOTYVXQxQ.png" width="800"/>[^2]
 
-
 # Commands
 
 ## The core workflow
 The core Terraform workflow consists of three stages:
-
 1. **Write:** You define resources, which may be across multiple cloud providers and services. For example, you might create a configuration to deploy an application on virtual machines in a Virtual Private Cloud (VPC) network with security groups and a load balancer.
 2. **Plan:** Terraform creates an execution plan describing the infrastructure it will create, update, or destroy based on the existing infrastructure and your configuration.
 3. **Apply:** On approval, Terraform performs the proposed operations in the correct order, respecting any resource dependencies. For example, if you update the properties of a VPC and change the number of virtual machines in that VPC, Terraform will recreate the VPC before scaling the virtual machines.
 
-There are three types of users, the workflow changes based on the user type:
+<img src="https://miro.medium.com/max/1400/1*E6p3Q7PGrlPtLSxaYxBtAQ.png" width="600"/>[^1]
 
+There are three types of users, the workflow changes based on the user type:
 | Stage / User type | **Individual** | **Team** | **Terraform Cloud** |
 | ----- | ----- | ----- | ----- |
 | Write | Create the Terraform files | Create the Terraform files and Checkout the latest code | Use Terraform Cloud as your `development` environment (statefiles, variables and secrets on Terrafom Cloud) |
 | Plan | Run Terraform plan and check | Run Terraform Plan and raise a Pull-Request | When a PR is raised, Terraform Plan is run |
 | Create | Create the infrastructure | Merge and create | Before merging a second plan is run before approval to create |
-
-<img src="https://miro.medium.com/max/1400/1*E6p3Q7PGrlPtLSxaYxBtAQ.png" width="600"/>[^1]
 
 ### terraform init
 [The `terraform init` command](https://www.terraform.io/docs/commands/init.html) is used to initialize a working directory containing Terraform configuration files. It is safe to run this command multiple times, , this command will never delete your existing configuration or state. During init, the root configuration directory is consulted for [backend configuration](https://www.terraform.io/docs/backends/config.html) and the chosen backend is initialized using the given configuration settings.
