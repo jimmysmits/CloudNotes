@@ -45,9 +45,9 @@ The Terraform language is _declarative_, describing an intended goal rather than
 
 
 # Expressions
-Expressions are used to refer to or compute values within a configuration. The simplest expressions are just literal values, like `"hello"` or `5`, but the Terraform language also allows more complex expressions such as references to data exported by resources, arithmetic, conditional evaluation, and a number of built-in functions.
+[Expression](https://www.terraform.io/docs/configuration/expressions.html) are used to refer to or compute values within a configuration. The simplest expressions are just literal values, like `"hello"` or `5`, but the Terraform language also allows more complex expressions such as references to data exported by resources, arithmetic, conditional evaluation, and a number of built-in functions.
 
-The result of an expression is a value. All values have a type, which dictates where that value can be used and what transformations can be applied to it.
+The result of an expression is a value. All values have a [type](https://www.terraform.io/language/expressions/types#types=), which dictates where that value can be used and what transformations can be applied to it.
 
 <img src="https://miro.medium.com/max/1400/1*RgNuNbnxCekhoIu-PgG-1Q.png" width="900"/>[^1]
 
@@ -100,7 +100,7 @@ variable "mylist" {
 > Remember the first value is the 0 position. For example, the 0 position can be accessed through the following command: `var.mylist[0]`.
 
 ## Complex type: Map
-`map` is a Key:Value pair. We use the key to access to the value. 
+`map` is a `<Key> = <Value>` pair. We use the key to access to the value. 
 
 ```
 variable "mymap" {
@@ -395,11 +395,9 @@ Destroy provisioners are run before the resource is destroyed. If they fail, Ter
 > By default, a defined provisioner is a creation-time provisioner. You must explicitly define a provisioner to be a destroy-time provisioner
 
 ##### Local-Exec vs. Remote-Exec
-
-With Terraform the plugins have 2 options to do the job:
-
--   Local-Exec: From our local machine
--   Remote-Exec: On the remote instance
+With Terraform the plugins have two options to do the job:
+-   [**Local-Exec:**](https://www.terraform.io/docs/provisioners/local-exec.html) From our local machine
+-   [**Remote-Exec:**](https://www.terraform.io/docs/provisioners/remote-exec.html) On the remote instance
 
 One example of local-exec is create a ssh key in our machine.
 
@@ -429,17 +427,11 @@ One example for remote-exec is from the key create previously, we can configure 
 
 ```
 
-Links:
-
--   <https://www.terraform.io/docs/provisioners/local-exec.html>
--   <https://www.terraform.io/docs/provisioners/remote-exec.html>
-
 ## Providers
-
-A provider is responsible for understanding API interactions and exposing resources. If an API is available, you can create a provider. A provider user a plugin. In order to make a provider available on Terraform, we need to make a `terraform init`, this commands download any plugins we need for our providers. If for example we need to copy the plugin directory manually, we can do it, moving the files to `.terraform.d/plugins`
+Providers are plugins that implement resource types. A provider is responsible for understanding API interactions and exposing resources. If an API is available, you can create a provider. A provider uses a plugin. In order to make a provider available on Terraform, we need to run a `terraform init`, this command download any plugins we need for our providers. If for example we need to copy the plugin directory manually, we can do it, moving the files to `.terraform.d/plugins`.
 
 > **Note** 
-> Using `terraform providers` command we can view the specified version constraints for all providers used in the current configuration
+> Using the `terraform providers` command we can view the specified version constraints for all providers used in the current configuration.
 
 <img src="https://miro.medium.com/max/1400/1*Vyb5RNl3PhxytQsD0vaH-w.png" width="800"/>[^1]
 
@@ -520,8 +512,7 @@ A data block request that Terraform read from a given data source and export the
 <img src="https://miro.medium.com/max/1400/1*3nnDHIS3zQ2W0CsGCjsHvQ.png" width="800"/>[^1]
 
 ### Versioning
-
-The `required_version` setting can be used to constrain which versions of the Terraform CLI can be used with your configuration. If the running version of Terraform doesn't match the constraints specified, Terraform will produce an error and exit without taking any further actions.
+[The `required_version` setting](https://www.terraform.io/docs/configuration/terraform.html#specifying-a-required-terraform-version) can be used to constrain which versions of the Terraform CLI can be used with your configuration. If the running version of Terraform doesn't match the constraints specified, Terraform will produce an error and exit without taking any further actions.
 
 ```
 terraform {
@@ -547,13 +538,10 @@ provider "aws" {
 
 ```
 
-Link: <https://www.terraform.io/docs/configuration/terraform.html#specifying-a-required-terraform-version>
-
 ## Dynamic blocks
-
 Within top-level block constructs like resources, expressions can usually be used only when assigning a value to an argument using the `name = expression` form. This covers many uses, but some resource types include repeatable *nested blocks* in their arguments.
 
-You can dynamically construct repeatable nested blocks like `setting` using a special `dynamic` block type, which is supported inside `resource`, `data`, `provider`, and `provisioner` blocks:
+[You can dynamically construct repeatable nested blocks](https://www.terraform.io/language/expressions/dynamic-blocks) like `setting` using a special `dynamic` block type, which is supported inside `resource`, `data`, `provider`, and `provisioner` blocks:
 
 ```
 resource "aws_elastic_beanstalk_environment" "tfenvtest" {
@@ -575,11 +563,9 @@ resource "aws_elastic_beanstalk_environment" "tfenvtest" {
 
 A `dynamic` block acts much like a `for` expression, but produces nested blocks instead of a complex typed value. It iterates over a given complex value, and generates a nested block for each element of that complex value.
 
-Link: <https://www.terraform.io/docs/configuration/expressions.html>
-
 ## Modules
 
-A module is a simple directory that contains other .tf files. Using modules we can make the code reusable. Modules are local or remote.
+A module is a simple directory that contains other `.tf` files. Using modules we can make the code reusable. Modules are local or remote.
 
 <img src="https://miro.medium.com/max/1400/1*ItQg-iUT0O3QDiLoJBndJg.png" width="600"/>[^2]
 <img src="https://miro.medium.com/max/1400/1*ilau3dR50ZfKadoc1_TO_w.png" width="600"/>[^2]
@@ -637,13 +623,13 @@ output "dbprivateip" {
 }
 
 ```
-<img src="https://miro.medium.com/max/1400/1*nC50N58BRmDPkIKGHQOqbA.png" width="700"/>[^2]
+<img src="https://miro.medium.com/max/1400/1*nC50N58BRmDPkIKGHQOqbA.png" width="800"/>[^2]
 
 ### Child modules
 
 Terraform allows for _child modules_, modules within modules, so to say. This basically is a directory with .tf files, within other directories with others sub modules. After add a subdirectory, remember to execute again `terraform init`
 
-<img src="https://miro.medium.com/max/1400/1*7OER_lXpP-25B1LKW1lPOw.png" width="700"/>[^2]
+<img src="https://miro.medium.com/max/1400/1*7OER_lXpP-25B1LKW1lPOw.png" width="800"/>[^2]
 
 ### Module compositions
 The key features of modules are _re-usability_ and _composability_. Below are some patterns to keep in mind when creating flexible, re-usable and composable modules.
@@ -660,7 +646,7 @@ In the example above the network creation is separated from the redis module. Th
 
 > Avoid complex conditional branches when creating objects within modules. Using an input variable is more declarative.
 
-<img src="https://miro.medium.com/max/1400/1*expkYWhUbQfQLsOTYVXQxQ.png" width="600"/>[^2]
+<img src="https://miro.medium.com/max/1400/1*expkYWhUbQfQLsOTYVXQxQ.png" width="800"/>[^2]
 
 
 # Commands
@@ -672,37 +658,23 @@ The core Terraform workflow consists of three stages:
 2. **Plan:** Terraform creates an execution plan describing the infrastructure it will create, update, or destroy based on the existing infrastructure and your configuration.
 3. **Apply:** On approval, Terraform performs the proposed operations in the correct order, respecting any resource dependencies. For example, if you update the properties of a VPC and change the number of virtual machines in that VPC, Terraform will recreate the VPC before scaling the virtual machines.
 
-There are three types of users, the workflow changes based on the user type
+There are three types of users, the workflow changes based on the user type:
 
--   **Individual**
+| Stage / User type | **Individual** | **Team** | **Terraform Cloud** |
+| ----- | ----- | ----- | ----- |
+| Write | Create the Terraform files | Create the Terraform files and Checkout the latest code | Use Terraform Cloud as your `development` environment (statefiles, variables and secrets on Terrafom Cloud) |
+| Plan | Run Terraform plan and check | Run Terraform Plan and raise a Pull-Request | When a PR is raised, Terraform Plan is run |
+| Create | Create the infrastructure | Merge and create | Before merging a second plan is run before approval to create |
 
-    -   Write: Create the Terraform files
-    -   Plan: Run Terraform plan and check
-    -   Create: Create the infrastructure
--   **Team**
-
-    -   Write: Create the Terraform files and Checkout the latest code
-    -   Plan: Run Terraform Plan and raise a Pull-Request
-    -   Create: Merge and create
--   **Terraform Cloud**
-
-    -   Write: Use Terraform Cloud as your `development` environment (statefiles, variables and secrets on Terrafom Cloud)
-    -   Plan: When a PR is raised, Terraform Plan is run
-    -   Create: Before merging a second plan is run before approval to create
-
-<img src="https://miro.medium.com/max/1400/1*E6p3Q7PGrlPtLSxaYxBtAQ.png" width="500"/>[^1]
+<img src="https://miro.medium.com/max/1400/1*E6p3Q7PGrlPtLSxaYxBtAQ.png" width="600"/>[^1]
 
 ### terraform init
+[The `terraform init` command](https://www.terraform.io/docs/commands/init.html) is used to initialize a working directory containing Terraform configuration files. It is safe to run this command multiple times, , this command will never delete your existing configuration or state. During init, the root configuration directory is consulted for [backend configuration](https://www.terraform.io/docs/backends/config.html) and the chosen backend is initialized using the given configuration settings.
 
-The `terraform init` command is used to initialize a working directory containing Terraform configuration files. It is safe to run this command multiple times, , this command will never delete your existing configuration or state. During init, the root configuration directory is consulted for [backend configuration](https://www.terraform.io/docs/backends/config.html) and the chosen backend is initialized using the given configuration settings.
-
-Link: <https://www.terraform.io/docs/commands/init.html>
-
-<img src="https://miro.medium.com/max/1400/1*z6bsYznAVDzqvpfL3xxbXw.png" width="500"/>[^1]
+<img src="https://miro.medium.com/max/1400/1*z6bsYznAVDzqvpfL3xxbXw.png" width="800"/>[^1]
 
 ### terraform validate
-
-The `terraform validate` command validates the configuration files in a directory, referring only to the configuration and not accessing any remote services such as remote state, provider APIs, etc.
+[The `terraform validate` command](https://www.terraform.io/docs/commands/validate.html) validates the configuration files in a directory, referring only to the configuration and not accessing any remote services such as remote state, provider APIs, etc.
 
 Validate runs checks that verify whether a configuration is syntactically valid and internally consistent, regardless of any provided variables or existing state.
 
@@ -713,38 +685,26 @@ It is safe to run this command automatically, for example as a post-save check i
 > **Note** 
 > Validation requires an initialized working directory with any referenced plugins and modules installed.
 
-Link: <https://www.terraform.io/docs/commands/validate.html>
-
 ### terraform plan
+[The `terraform plan` command](https://www.terraform.io/docs/commands/plan.html) is used to create an execution plan. Terraform performs a refresh, unless explicitly disabled, and then determines what actions are necessary to achieve the desired state specified in the configuration files.
 
-The `terraform plan` command is used to create an execution plan. Terraform performs a refresh, unless explicitly disabled, and then determines what actions are necessary to achieve the desired state specified in the configuration files.
-
-Link: <https://www.terraform.io/docs/commands/plan.html>
-
-<img src="https://miro.medium.com/max/1400/1*3Y1M38zlOEnurCxBHbMg9w.png" width="500"/>[^1]
+<img src="https://miro.medium.com/max/1400/1*3Y1M38zlOEnurCxBHbMg9w.png" width="600"/>[^1]
 
 ### terraform apply
+[The `terraform apply` command](https://www.terraform.io/docs/commands/apply.html) is used to apply the changes required to reach the desired state of the configuration, or the pre-determined set of actions generated by a `terraform plan` execution plan.
 
-The `terraform apply` command is used to apply the changes required to reach the desired state of the configuration, or the pre-determined set of actions generated by a `terraform plan` execution plan.
-
-Link: <https://www.terraform.io/docs/commands/apply.html>
-
-<img src="https://miro.medium.com/max/1400/1*SSXJh0WapTdixVEg0GDVsA.png" width="500"/>[^1]
+<img src="https://miro.medium.com/max/1400/1*SSXJh0WapTdixVEg0GDVsA.png" width="800"/>[^1]
 
 ### terraform destroy
+[The `terraform destroy` command](https://www.terraform.io/docs/commands/destroy.html) is used to destroy the Terraform-managed infrastructure.
 
-The `terraform destroy` command is used to destroy the Terraform-managed infrastructure.
-
-Link: <https://www.terraform.io/docs/commands/destroy.html>
 
 ## Other commands
 
 ### terraform fmt
-
 The `terraform fmt` command is used to rewrite Terraform configuration files to a canonical format and style. The canonical format may change in minor ways between Terraform versions, so after upgrading Terraform it is recommended to proactively run `fmt`
 
 ### terraform taint
-
 The `terraform taint` command manually marks a Terraform-managed resource as tainted, forcing it to be destroyed and recreated on the next apply. Taint force the recreation. This command *will not* modify infrastructure, but does modify the state file in order to mark a resource as tainted. Once a resource is marked as tainted, the next [plan](https://www.terraform.io/docs/commands/plan.html) will show that the resource will be destroyed and recreated and the next [apply](https://www.terraform.io/docs/commands/apply.html) will implement this change.
 
 Forcing the recreation of a resource is useful when you want a certain side effect of recreation that is not visible in the attributes of a resource. For example: re-running provisioners will cause the node to be different or rebooting the machine from a base image will cause new startup scripts to run.
@@ -754,14 +714,12 @@ Example:
 ```
 $ terraform taint aws_vpc.myvpc
 The resource aws_vpc.myvpc in the module root has been marked as tainted.
-
 ```
 
 Another example if we want taint the resource "aws_instance" "baz" resource that lives in module bar which lives in module foo.
 
 ```
 terraform taint module.foo.module.bar.aws_instance.baz
-
 ```
 
 Link: <https://www.terraform.io/docs/internals/resource-addressing.html>
@@ -776,12 +734,10 @@ The `terraform untaint` command manually unmark a Terraform-managed resource a
 ```
 $ terraform untaint aws_vpc.myvpc
 Resource aws_vpc.myvpc2 has been successfully untainted.
-
 ```
 
 ### terraform import
-
-The `terraform import` command is used to [import existing resources](https://www.terraform.io/docs/import/index.html) into Terraform.
+[The `terraform import` command](https://www.terraform.io/docs/commands/import.html>) is used to [import existing resources](https://www.terraform.io/docs/import/index.html) into Terraform.
 
 Import will find the existing resource from ID and import it into your Terraform state at the given ADDRESS.
 
@@ -795,13 +751,10 @@ Example:
 
 ```
 $ terraform import aws_vpc.vpcimport vpc-06f0e46d612
-
 ```
 
 > **Note**
 >  `terraform import` command can import resources directly into modules
-
-Link: <https://www.terraform.io/docs/commands/import.html>
 
 ### terraform show
 
@@ -813,9 +766,7 @@ You may use `show` with a path to either a Terraform state file or plan file. 
 
 ### terraform workspace
 
-The `terraform workspace` command is used to manage [workspaces](https://www.terraform.io/docs/state/workspaces.html). It is useful to split and separate the statefiles.
-
-This command is a container for further subcommands such as `list`, `select`, `new`, `delete` and `show`
+The `terraform workspace` command is used to manage [workspaces](https://www.terraform.io/docs/state/workspaces.html). It is useful to split and separate the state files. This command is a container for further subcommands such as `list`, `select`, `new`, `delete` and `show`
 
 Usage: `terraform workspace <subcommand> [options] [args]`
 
@@ -824,7 +775,6 @@ If we never create a workspace we use the default workspace
 ```
 # terraform workspace list
 * default
-
 ```
 
 > **Note**
@@ -834,9 +784,9 @@ If we never create a workspace we use the default workspace
 > Terraform Cloud and Terraform CLI both have features called "workspaces," but they're slightly different. CLI workspaces are alternate state files in the same working directory; they're a convenience feature for using one configuration to manage multiple similar groups of resources.
 
 #### terraform workspace new
-
 The `terraform workspace new` command is used to create a new workspace.
 
+Example:
 ```
 $ terraform workspace new dev
 Created and switched to workspace "dev"!
@@ -844,10 +794,9 @@ Created and switched to workspace "dev"!
 You're now on a new, empty workspace. Workspaces isolate their state,
 so if you run "terraform plan" Terraform will not see any existing state
 for this configuration.
-
 ```
 
-Now, if we execute a `terraform plan` in our environment, the plan will try to show many resources to create, because is a different state file.
+Now, if we execute a `terraform plan` in our environment, the plan will show many resources to create, because this is a different state file.
 
 #### terraform workspace show
 
@@ -856,38 +805,32 @@ The `terraform workspace show` command is used to output the current workspace
 ```
 $ terraform workspace show
 dev
-
 ```
 
 #### terraform workspace select
-
 The `terraform workspace select` command is used to choose a different workspace to use for further operations. First we need to execute a `terraform workspace list` to know the workspaces names.
 
 ```
 $ terraform workspace select default
 Switched to workspace "default".
-
 ```
 
 #### terraform workspace delete
-
 The `terraform workspace delete` command is used to delete an existing workspace.
 
 ```
 $ terraform workspace delete dev
 Deleted workspace "dev"!
-
 ```
 
 ## terraform state
 
 ### terraform state list
-
-The `terraform state list` command is used to list resources within a [Terraform state](https://www.terraform.io/docs/state/index.html)
+[The `terraform state list` command](https://www.terraform.io/docs/commands/state/list.html) is used to list resources within a [Terraform state](https://www.terraform.io/docs/state/index.html)
 
 The command will list all resources in the state file matching the given addresses (if any). If no addresses are given, all resources are listed.
 
-Example list all resources:
+Example of listing all resources:
 
 ```
 $ terraform state list
@@ -895,22 +838,17 @@ aws_instance.foo
 aws_instance.bar[0]
 aws_instance.bar[1]
 module.elb.aws_elb.main
-
 ```
 
-Example Filtering by Resource
+Example of filtering by resource:
 
 ```
 $ terraform state list aws_instance.bar
 aws_instance.bar[0]
 aws_instance.bar[1]
-
 ```
 
-Link: <https://www.terraform.io/docs/commands/state/list.html>
-
 ### terraform state pull
-
 The `terraform state pull` command is used to manually download and output the state from [remote state](https://www.terraform.io/docs/state/remote.html). This command also works with local state (but is not very useful because we can see the local file)
 
 This command will download the state from its current location and output the raw format to stdout.
@@ -918,27 +856,21 @@ This command will download the state from its current location and output the ra
 This is useful for reading values out of state (potentially pairing this command with something like [jq](https://stedolan.github.io/jq/)). It is also useful if you need to make manual modifications to state.
 
 ### terraform state mv
-
-The `terraform state mv` command is used to move items in a [Terraform state](https://www.terraform.io/docs/state/index.html). This command can move single resources, single instances of a resource, entire modules, and more. This command can also move items to a completely different state file, enabling efficient refactoring.
+[The `terraform state mv` command](<https://www.terraform.io/docs/commands/state/mv.html) is used to move items in a [Terraform state](https://www.terraform.io/docs/state/index.html). This command can move single resources, single instances of a resource, entire modules, and more. This command can also move items to a completely different state file, enabling efficient refactoring.
 
 Usage: `terraform state mv [options] SOURCE DESTINATION`
 
 This can be used for simple resource renaming, moving items to and from a module, moving entire modules, and more. And because this command can also move data to a completely new state, it can also be used for refactoring one configuration into multiple separately managed Terraform configurations.
 
 Example:
-
 ```
 terraform state mv 'packet_device.worker' 'packet_device.helper'
-
 ```
 
-Link: <https://www.terraform.io/docs/commands/state/mv.html>
-
 ### terraform state rm
+[The `terraform state rm` command](<https://www.terraform.io/docs/commands/state/rm.html) is used to remove items from the [Terraform state](https://www.terraform.io/docs/state/index.html). This command can remove single resources, single instances of a resource, entire modules, and more.
 
-The `terraform state rm` command is used to remove items from the [Terraform state](https://www.terraform.io/docs/state/index.html). This command can remove single resources, single instances of a resource, entire modules, and more.
-
-Usage: `terraform state rm [options] ADDRESS...`
+Usage: `terraform state rm [options] ADDRESS...`.
 
 Items removed from the Terraform state are *not physically destroyed*. Items removed from the Terraform state are only no longer managed by Terraform. For example, if you remove an AWS instance from the state, the AWS instance will continue running, but `terraform plan` will no longer see that instance.
 
@@ -948,21 +880,15 @@ Example remove a resource:
 
 ```
 $ terraform state rm 'packet_device.worker'
-
 ```
 
 Example remove a module:
 
 ```
 $ terraform state rm 'module.foo'
-
 ```
 
-Link: <https://www.terraform.io/docs/commands/state/rm.html>
-
-
 # Built-in functions
-
 The Terraform language includes a number of built-in functions that you can call from within expressions to transform and combine values. The general syntax for function calls is a function name followed by comma-separated arguments in parentheses:
 
 ```
@@ -989,7 +915,6 @@ Examples:
 ay
 > lookup({a="ay", b="bee"}, "c", "what?")
 what?
-
 ```
 
 Links:
@@ -1001,7 +926,6 @@ Links:
 # State
 
 ## Local state
-
 The local backend stores state on the local filesystem, locks that state using system APIs, and performs operations locally.
 
 ```
@@ -1010,11 +934,9 @@ terraform {
     path = "relative/path/to/terraform.tfstate"
   }
 }
-
 ```
 
 ## Partial configuration
-
 You do not need to specify every required argument in the backend configuration. Omitting certain arguments may be desirable to avoid storing secrets, such as access keys, within the main configuration. When some or all of the arguments are omitted, we call this a *partial configuration*.
 
 With a partial configuration, the remaining configuration arguments must be provided as part of [the initialization process](https://www.terraform.io/docs/backends/init.html#backend-initialization). There are several ways to supply the remaining arguments:
@@ -1024,12 +946,11 @@ With a partial configuration, the remaining configuration arguments must be prov
 -   _Command line key/value pairs:_ Key/value pairs can be specified via the `init` command line.
 
 ## terraform refresh
-
-The `terraform refresh` command is used to reconcile the state Terraform knows about (via its state file) with the real-world infrastructure. This can be used to detect any drift from the last-known state, and to update the state file.
+[The `terraform refresh` command](https://www.terraform.io/docs/commands/refresh.html) is used to reconcile the state Terraform knows about (via its state file) with the real-world infrastructure. This can be used to detect any drift from the last-known state, and to update the state file.
 
 This does not modify infrastructure, but does modify the state file. If the state is changed, this may cause changes to occur during the next plan or apply.
 
-Usage: `terraform refresh [options] [dir]`
+Usage: `terraform refresh [options] [dir]`.
 
 For example, if we change some configuration using the web console, we need to do:
 
@@ -1039,9 +960,8 @@ $ terraform plan
 
 ```
 
-`refresh` Is good to sync changes, in some cases is better to use `terraform import` depending of the complexity
+`refresh` is good practice to sync changes, in some cases it iss better to use `terraform import` depending on the complexity.
 
-Link: <https://www.terraform.io/docs/commands/refresh.html>
 
 ## Remote backends
 
@@ -1154,7 +1074,7 @@ If we want to do a Destroy, we only need to click on the option "Queue destroy p
 
 ## OSS vs. Terraform Cloud
 
-| Component | OSS| Terraform Cloud |
+| Component | OSS | Terraform Cloud |
 | --- | --- | --- |
 | Terraform Configuration | On Disk | In linked version control repository, or periodically updated via API/CLI |
 | Variable values | As .tfvars file, as CLI arguments, or in shell environment | In workspace |
