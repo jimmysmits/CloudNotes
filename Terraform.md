@@ -13,13 +13,25 @@ The infrastructure Terraform can manage includes low-level components such as co
 ![](https://miro.medium.com/max/1400/1*ozyZq7fXo1t10hvukS8KtQ.png)
 Source: https://medium.com/better-programming/how-terraform-works-a-visual-intro-6328cddbe067
 
+**How it works**
+![](https://miro.medium.com/max/1400/1*A1PWiPFasWKNePCgL6N_Cg.png)
+Source: https://medium.com/better-programming/how-terraform-works-a-visual-intro-6328cddbe067
+
+
 MANAGE INFRASTRUCTURE
 ---------------------
 
 ### BLOCKS
-![]https://miro.medium.com/max/1400/1*b8enCRGjvJkO6texZBnEfg.png
+![](https://miro.medium.com/max/1400/1*b8enCRGjvJkO6texZBnEfg.png)
+Source: https://medium.com/better-programming/how-terraform-works-a-visual-intro-6328cddbe067
+
+#### VARIABLES BLOCKS
+![](https://miro.medium.com/max/1400/1*_FWwGch6_ettk6ZvYPYwAw.png)
+Source: https://medium.com/better-programming/how-terraform-works-a-visual-intro-6328cddbe067
 
 #### VARIABLES TYPES
+![](https://miro.medium.com/max/1400/1*RgNuNbnxCekhoIu-PgG-1Q.png)
+Source: https://medium.com/better-programming/how-terraform-works-a-visual-intro-6328cddbe067
 
 Strings, Numbers, Boolean, List, or Maps. We can define a `default` value, example
 
@@ -153,6 +165,9 @@ Use local values only in moderation, in situations where a single value or resul
 #### ENVIRONMENT VARIABLES
 
 We can create an export with our variable before execute `terraform plan`, and overwrite the value on the .tf files, for example `export TF_VAR_vpcname=envvpc`. This is useful for pass secrets or sensitive information in a secure form.
+
+![](https://miro.medium.com/max/1400/1*a1XXIztHa2Et_g-pSftDSw.png)
+Source: https://medium.com/better-programming/how-terraform-works-a-visual-intro-6328cddbe067
 
 #### CLI VARIABLES
 
@@ -385,6 +400,9 @@ MASTER THE WORKFLOW
     -   Write: Use Terraform Cloud as your `development` environment (statefiles, variables and secrets on Terrafom Cloud)
     -   Plan: When a PR is raised, Terraform Plan is run
     -   Create: Before merging a second plan is run before approval to create
+
+![](https://miro.medium.com/max/1400/1*E6p3Q7PGrlPtLSxaYxBtAQ.png)
+Source: https://medium.com/better-programming/how-terraform-works-a-visual-intro-6328cddbe067
 
 #### TERRAFORM INIT
 
