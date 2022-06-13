@@ -45,7 +45,7 @@ variable "sshport" {
 
 ```
 
-🗒️: Both _Number_ and _Integer_ don't need double quotes, but Terraform automatically converts _Number_ and _Boolean_ values to strings when needed. For example 5 and "5" both are correct.
+> **Note** Both _Number_ and _Integer_ don't need double quotes, but Terraform automatically converts _Number_ and _Boolean_ values to strings when needed. For example 5 and "5" both are correct.
 
 ## Variables type: List
 
@@ -74,9 +74,9 @@ variable "mymap" {
 
 ```
 
-_Important:_ For example, if we need to access the value of Key1 (Value1) we can using the next example `var.mymap["Key1"]`
+For example, if we need to access the value of Key1 (Value1) we can using the next example `var.mymap["Key1"]`
 
-🗒️: Remember, we use [ ] for list, and we use { } for maps
+> **Note** Remember, we use [ ] for list, and we use { } for maps
 
 ## Variables type: Tuple
 
@@ -105,7 +105,7 @@ variable "myobject" {
 
 ```
 
-🗒️: Using objects and tuples allows us to have multiple values of several distinct types to be grouped as a single value.
+> **Note** Using objects and tuples allows us to have multiple values of several distinct types to be grouped as a single value.
 
 # Blocks
 ![](https://miro.medium.com/max/1400/1*b8enCRGjvJkO6texZBnEfg.png)[^1]
@@ -193,7 +193,7 @@ A local value assigns a name to an [expression](https://www.terraform.io/docs/c
 
 Comparing modules to functions in a traditional programming language: if [input variables](https://www.terraform.io/docs/configuration/variables.html) are analogous to function arguments and [outputs values](https://www.terraform.io/docs/configuration/outputs.html) are analogous to function return values, then *local values* are comparable to a function's local temporary symbols.
 
-🗒️: For brevity, local values are often referred to as just "locals" when the meaning is clear from context.
+> **Note** For brevity, local values are often referred to as just "locals" when the meaning is clear from context.
 
 **Declaring a local value:**
 A set of related local values can be declared together in a single `locals` block.
@@ -237,7 +237,7 @@ policy = {
 
 ```
 
-🗒️: The `terraform.tfvars` file is used to define variables and the `.tf` file declare that the variable exists.
+> **Note** The `terraform.tfvars` file is used to define variables and the `.tf` file declare that the variable exists.
 
 Link: <https://amazicworld.com/difference-between-variable-tf-and-variable-tfvars-in-terraform>
 
@@ -262,13 +262,13 @@ terraform plan -var-file=prod.tfvars
 -   The tfvarsfile, if present. `terraform.tfvars`
 -   Environment variables
 
-🗒️: there is no mention of .tf file declaration in there, this is because variables declared in .tf files are concatenated into a single entity consisting of your variables.tf your main.tf and your output.tf files before being processed by Terraform. Hence this declaration have highest precedence in order of application.
+> **Note** there is no mention of .tf file declaration in there, this is because variables declared in .tf files are concatenated into a single entity consisting of your variables.tf your main.tf and your output.tf files before being processed by Terraform. Hence this declaration have highest precedence in order of application.
 
 ## Providers
 
 A provider is responsible for understanding API interactions and exposing resources. If an API is available, you can create a provider. A provider user a plugin. In order to make a provider available on Terraform, we need to make a `terraform init`, this commands download any plugins we need for our providers. If for example we need to copy the plugin directory manually, we can do it, moving the files to `.terraform.d/plugins`
 
-🗒️: Using `terraform providers` command we can view the specified version constraints for all providers used in the current configuration
+> **Note** Using `terraform providers` command we can view the specified version constraints for all providers used in the current configuration
 
 ![](https://miro.medium.com/max/1400/1*Vyb5RNl3PhxytQsD0vaH-w.png)[^1]
 
@@ -314,13 +314,41 @@ resource "aws_vpc" "irlvpc" {
 }
 
 ```
-## Resource
+## Resources
+Resources are the most important element in the Terraform language. Each resource block describes one or more infrastructure objects, such as virtual networks, compute instances, or higher-level components such as DNS records. For example:
 
-### Provisioners
+```
+resource "aws_instance" "web" {
+  ami           = "ami-a1b2c3d4"
+  instance_type = "t2.micro"
+}
+```
+
+The resource block above declares a resource of a given type ("aws_instance") with a given local name ("web"). The name is used to refer to this resource from elsewhere in the same Terraform module, but has no significance outside that module's scope.
+
+The resource type and name together serve as an identifier for a given resource and so must be unique within a module.
+
+Within the block body (between `{` and `}`) are the configuration arguments for the resource itself. Most arguments in this section depend on the resource type, and indeed in this example both ami and `instance_type` are arguments defined specifically for the `aws_instance` resource type.
+
+> **Note** Resource names must start with a letter or underscore, and may contain only letters, digits, underscores, and dashes.
+
+### Meta-Arguments
+The Terraform language defines several meta-arguments, which can be used with any resource type to change the behavior of resources.
+
+The following meta-arguments are documented on separate pages:
+
+- `depends_on`, for specifying hidden dependencies
+- `count`, for creating multiple resource instances according to a count
+- `for_each`, to create multiple instances according to a map, or set of strings
+- `provider`, for selecting a non-default provider configuration
+- `lifecycle`, for lifecycle customizations
+- `provisioner`, for taking extra actions after resource creation
+
+#### Provisioners
 
 _Provisioners_ can be used to model specific actions on the local machine or on a remote machine in order to prepare servers or other infrastructure objects for service.
 
-🗒️: Provisioners should only be used as a last resort. For most common situations there are better alternatives.
+> **Note** Provisioners should only be used as a last resort. For most common situations there are better alternatives.
 
 Example:
 
@@ -336,11 +364,11 @@ resource "aws_instance" "web" {
 
 The `local-exec` provisioner requires no other configuration, but most other provisioners must connect to the remote system using SSH or WinRM.
 
-#### Creation-time provisioners
+##### Creation-time provisioners
 
 By default, provisioners run when the resource they are defined within is created. Creation-time provisioners are only run during *creation*, not during updating or any other lifecycle. They are meant as a means to perform bootstrapping of a system. If a creation-time provisioner fails, the resource is marked as tainted. A tainted resource will be planned for destruction and recreation upon the next `terraform apply`
 
-#### Destroy-time provisioners
+##### Destroy-time provisioners
 
 If `when = "destroy"` is specified, the provisioner will run when the resource it is defined within is *destroyed*.
 
@@ -358,9 +386,9 @@ resource "aws_instance" "web" {
 
 Destroy provisioners are run before the resource is destroyed. If they fail, Terraform will error and rerun the provisioners again on the next `terraform apply`
 
-🗒️: By default, a defined provisioner is a creation-time provisioner. You must explicitly define a provisioner to be a destroy-time provisioner
+> **Note** By default, a defined provisioner is a creation-time provisioner. You must explicitly define a provisioner to be a destroy-time provisioner
 
-#### Local-Exec vs. Remote-Exec
+##### Local-Exec vs. Remote-Exec
 
 With Terraform the plugins have 2 options to do the job:
 
@@ -447,7 +475,7 @@ It is thus primarily useful for general verification of reusable modules, includ
 
 It is safe to run this command automatically, for example as a post-save check in a text editor or as a test step for a re-usable module in a CI system.
 
-🗒️: Validation requires an initialized working directory with any referenced plugins and modules installed.
+> **Note** Validation requires an initialized working directory with any referenced plugins and modules installed.
 
 Link: <https://www.terraform.io/docs/commands/validate.html>
 
@@ -506,7 +534,7 @@ Link: <https://www.terraform.io/docs/internals/resource-addressing.html>
 
 The `terraform untaint` command manually unmark a Terraform-managed resource as tainted, restoring it as the primary instance in the state.
 
-🗒️: This command *will not* modify infrastructure, but does modify the state file in order to unmark a resource as tainted.
+> **Note** This command *will not* modify infrastructure, but does modify the state file in order to unmark a resource as tainted.
 
 ```
 $ terraform untaint aws_vpc.myvpc
@@ -561,9 +589,9 @@ If we never create a workspace we use the default workspace
 
 ```
 
-🗒️: For local state, Terraform stores the workspace states in a directory called `terraform.tfstate.d`. This directory should be treated similarly to local-only `terraform.tfstate`
+> **Note** For local state, Terraform stores the workspace states in a directory called `terraform.tfstate.d`. This directory should be treated similarly to local-only `terraform.tfstate`
 
-🗒️: Terraform Cloud and Terraform CLI both have features called "workspaces," but they're slightly different. CLI workspaces are alternate state files in the same working directory; they're a convenience feature for using one configuration to manage multiple similar groups of resources.
+> **Note** Terraform Cloud and Terraform CLI both have features called "workspaces," but they're slightly different. CLI workspaces are alternate state files in the same working directory; they're a convenience feature for using one configuration to manage multiple similar groups of resources.
 
 #### terraform workspace new
 
@@ -850,7 +878,7 @@ output "dbserver" {
 
 A data block request that Terraform read from a given data source and export the result under the give local name.
 
-🗒️: Data source attributes are interpolated with the general syntax *data.TYPE.NAME.ATTRIBUTE*. The interpolation for a resource is the same but without the *data.* prefix (TYPE.NAME.ATTRIBUTE).
+> **Note** Data source attributes are interpolated with the general syntax *data.TYPE.NAME.ATTRIBUTE*. The interpolation for a resource is the same but without the *data.* prefix (TYPE.NAME.ATTRIBUTE).
 
 Link: <https://www.terraform.io/docs/providers/aws/d/instance.html>
 
@@ -863,7 +891,7 @@ max(5, 12, 9)
 
 ```
 
-🗒️: The Terraform language does not support user-defined functions, and so only the functions built in to the language are available for use.
+> **Note** The Terraform language does not support user-defined functions, and so only the functions built in to the language are available for use.
 
 A very useful function is the `file` function, using that, we can read the contents of a file and returns them as a string. Another important function is the `flatten` function, this takes a list and replaces any elements that are list with a flattened sequence of the list contents.
 
@@ -969,9 +997,9 @@ terraform {
 
 ```
 
-🗒️: This assumes we have a bucket created called `mybucket`. The Terraform state is written to the key `state/terraform.tfstate`.
+> **Note** This assumes we have a bucket created called `mybucket`. The Terraform state is written to the key `state/terraform.tfstate`.
 
-Important: If we have a local state, and after that we change to the S3 backend, when we execute `terraform init` the system ask us if we want to copy existing state to the new backend.
+> **Note** If we have a local state, and after that we change to the S3 backend, when we execute `terraform init` the system ask us if we want to copy existing state to the new backend.
 
 Similar to if we delete a remote backend from the configuration, when we execute the re-initialization, Terraform will ask if we would like to migrate our state back down to normal local state.
 
@@ -1024,7 +1052,7 @@ Link: <https://www.terraform.io/docs/commands/state/push.html>
 -   Standard: state management, storage and locking
 -   Enhanced: Only on Terraform Cloud, standard + can run operations remotely
 
-🗒️: Backend that support state lockings: AzureRM, Consul, S3
+> **Note** Backends that support state lockings: (1) AzureRM, (2) Consul, (3) AWS S3
 
 ## RECAP OF STATE
 
@@ -1050,7 +1078,7 @@ export TF_LOG=TRACE
 
 You can set `TF_LOG` to one of the log levels `TRACE`, `DEBUG`, `INFO`, `WARN` or `ERROR` to change the verbosity of the logs. `TRACE` is the most verbose and it is the default if `TF_LOG` is set to something other than a log level name.
 
-🗒️: When `TF_LOG_PATH` is set, `TF_LOG` must be set in order for any logging to be enabled, and `TF_LOG_PATH` point to a specific file (not directory), for example `TF_LOG_PATH=./terraform.log`
+> **Note** When `TF_LOG_PATH` is set, `TF_LOG` must be set in order for any logging to be enabled, and `TF_LOG_PATH` point to a specific file (not directory), for example `TF_LOG_PATH=./terraform.log`
 
 Link: <https://www.terraform.io/docs/internals/debugging.html>
 
@@ -1076,11 +1104,11 @@ Right now we need to Configure Variables, because we used AWS provider, we need 
 
 For the last, we need to configure a Queue Plan, this allow us to execute a `Terraform plan` after this complete, we can Confirm & Apply
 
-🗒️: The remote backend stores Terraform state and may be used to run operations in Terraform Cloud. When using full remote operations, operations like `terraform plan` or `terraform apply` can be executed in Terraform Cloud's run environment, with log output streaming to the local terminal.
+> **Note** The remote backend stores Terraform state and may be used to run operations in Terraform Cloud. When using full remote operations, operations like `terraform plan` or `terraform apply` can be executed in Terraform Cloud's run environment, with log output streaming to the local terminal.
 
-🗒️: Workspaces, managed with the `terraform workspace` command, aren't the same thing as Terraform Cloud's workspaces. Terraform Cloud workspaces act more like completely separate working directories; CLI workspaces are just alternate state files.
+> **Note** Workspaces, managed with the `terraform workspace` command, aren't the same thing as Terraform Cloud's workspaces. Terraform Cloud workspaces act more like completely separate working directories; CLI workspaces are just alternate state files.
 
-🗒️: Terraform Cloud always encrypts state at rest and protects it with TLS in transit.
+> **Note** Terraform Cloud always encrypts state at rest and protects it with TLS in transit.
 
 If we want to do a Destroy, we only need to click on the option "Queue destroy plan"
 
