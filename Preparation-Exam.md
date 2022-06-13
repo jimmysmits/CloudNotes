@@ -1,10 +1,10 @@
 # Introduction
 
-_Infrastructure as Code_ it is the process of managing infrastructure in a file or files rather than manually configuring resources in a user interface. A resource in this instance is any piece of infrastructure in a given environment, such as a virtual machine, security group, network interface, etc.
+- _Infrastructure as Code_ is the process of managing infrastructure in a file or files rather than manually configuring resources in a user interface. A resource in this instance is any piece of infrastructure in a given environment, such as a virtual machine, security group, network interface, etc.
 
-_Terraform_ is a tool for building, changing, and versioning infrastructure safely and efficiently. Terraform can manage existing and popular service providers as well as custom in-house solutions.
+- _Terraform_ is a tool for building, changing, and versioning infrastructure safely and efficiently. Terraform can manage existing and popular service providers as well as custom in-house solutions.
 
-_Configuration files_ describe to Terraform the components needed to run a single application or your entire datacenter. Terraform generates an execution plan describing what it will do to reach the desired state, and then executes it to build the described infrastructure. As the configuration changes, Terraform is able to determine what changed and create incremental execution plans which can be applied.
+- _Configuration files_ describe to Terraform the components needed to run a single application or your entire datacenter. Terraform generates an execution plan describing what it will do to reach the desired state, and then executes it to build the described infrastructure. As the configuration changes, Terraform is able to determine what changed and create incremental execution plans which can be applied.
 
 The infrastructure Terraform can manage includes low-level components such as compute instances, storage, and networking, as well as high-level components such as DNS entries, SaaS features, etc.
 
@@ -12,7 +12,7 @@ The infrastructure Terraform can manage includes low-level components such as co
 <img src="https://miro.medium.com/max/1400/1*ozyZq7fXo1t10hvukS8KtQ.png" width="500"/>[^1]
 
 ## How it works
-Terraform creates and manages resources on cloud platforms and other services through their application programming interfaces (APIs). Providers enable Terraform to work with virtually any platform or service with an accessible API.
+Terraform creates and manages resources on cloud platforms and other services through their APIs. Providers enable Terraform to work with virtually any platform or service with an accessible API.
 <img src="https://miro.medium.com/max/1400/1*A1PWiPFasWKNePCgL6N_Cg.png" width="900"/>[^1]
 
 ## Configuration language
@@ -21,11 +21,11 @@ The main purpose of the Terraform language is declaring resources, which represe
 A Terraform configuration is a complete document in the Terraform language (Hashicorp Configuration Language (HCL)) that tells Terraform how to manage a given collection of infrastructure. A configuration can consist of multiple files and directories.
 
 The syntax of the Terraform language consists of only a few basic elements:
-- **Blocks** are containers for other content and usually represent the configuration of some kind of object, like a resource. Blocks have a block type, can have zero or more labels, and have a body that contains any number of arguments and nested blocks. Most of Terraform's features are controlled by top-level blocks in a configuration file.
-- **Arguments** assign a value to a name. They appear within blocks.
-- **Expressions** represent a value, either literally or by referencing and combining other values. They appear as values for arguments, or within other expressions.
+- **Blocks:** containers for other content and usually represent the configuration of some kind of object, like a resource. Blocks have a block type, can have zero or more labels, and have a body that contains any number of arguments and nested blocks. Most of Terraform's features are controlled by top-level blocks in a configuration file.
+- **Arguments:** assign a value to a name. They appear within blocks.
+- **Expressions:** represent a value, either literally or by referencing and combining other values. They appear as values for arguments, or within other expressions.
 
-These elements are structured as follows
+These elements are structured as follows:
 ```
 <BLOCK TYPE> "<BLOCK LABEL>" "<BLOCK LABEL>" {
   # Block body
@@ -45,7 +45,7 @@ The Terraform language is _declarative_, describing an intended goal rather than
 
 
 # Expressions
-Expressions are used to refer to or compute values within a configuration. The simplest expressions are just literal values, like "hello" or 5, but the Terraform language also allows more complex expressions such as references to data exported by resources, arithmetic, conditional evaluation, and a number of built-in functions.
+Expressions are used to refer to or compute values within a configuration. The simplest expressions are just literal values, like `"hello"` or `5`, but the Terraform language also allows more complex expressions such as references to data exported by resources, arithmetic, conditional evaluation, and a number of built-in functions.
 
 The result of an expression is a value. All values have a type, which dictates where that value can be used and what transformations can be applied to it.
 
@@ -170,9 +170,9 @@ The Terraform language uses a limited number of top-level block types, which are
 ## (Input) Variables & Values
 The Terraform language includes a few kinds of blocks for requesting or publishing named values.
 
-- **Input variables** serve as parameters for a Terraform module, so users can customize behavior without editing the source.
-- **Output values** are like return values for a Terraform module.
-- **Local values** are a convenience feature for assigning a short name to an expression.
+- **Input variables:** serve as parameters for a Terraform module, so users can customize behavior without editing the source.
+- **Output values:** are like return values for a Terraform module.
+- **Local values:** are a convenience feature for assigning a short name to an expression.
 
 ### (Input) Variables
 Each input variable accepted by a module must be declared using a variable block.  Terraform CLI defines optional arguments for variable declarations.
@@ -1070,38 +1070,28 @@ Similar to if we delete a remote backend from the configuration, when we execute
 
 Link: <https://www.terraform.io/docs/backends/types/s3.html>
 
-## REVERT TO LOCAL BACKEND
-
+## Revert to local backend
 If we want to change from S3 backend to Local backend, only we need to do `terraform destroy` after that delete `backend.tf` file, and run `terraform init`
 
-## BACKEND LIMITATIONS & SECURITY
+## Backend limitations & security
+When we use Terraform is only allowed one backend. The state cannot store secrets, for that reason we need to encrypt at rest.
 
-When we use Terraform is only allowed one backend.
+## terraform force-unlock
+Manually unlock the state for the defined configuration. This will not modify your infrastructure. This command removes the lock on the state for the current configuration. The behavior of this lock is dependent on the backend being used. Local state files cannot be unlocked by another process.
 
-The state cannot store secrets, for that reason we need to encrypt at rest.
-
-## TERRAFORM FORCE UNLOCK
-
-Manually unlock the state for the defined configuration.
-
-This will not modify your infrastructure. This command removes the lock on the state for the current configuration. The behavior of this lock is dependent on the backend being used. Local state files cannot be unlocked by another process.
-
-Usage: terraform force-unlock LOCK_ID [DIR]
+Usage: `terraform force-unlock LOCK_ID [DIR]`
 
 This is useful for example when another person write the remote state file, and something happening and the state file is lock, and we need to release.
 
 Link: <https://www.terraform.io/docs/commands/force-unlock.html>
 
-## TERRAFORM CLOUD
-
+## Terraform Cloud
 If we need the best solution for encryption and backups, the answer is Terraform Cloud. Terraform Cloud encrypt the state file at rest, and also encrypt using TLS.
 
 ## STATE IN MEMORY
-
-When we use remote states, Terraform save all the temporal information on memory, nothing persistent on disk, this is another Terraform security implementation.
+When we use remote states, Terraform save all the temporal information in memory, nothing persistent on disk, this is another Terraform security implementation.
 
 ## BACKEND AND STRING INTERPOLATION
-
 Backend cannot have any interpolations or use any variables. This need to be manually hardcoded
 
 ## terraform state push
@@ -1195,34 +1185,24 @@ Sentinel, VCS Integration are offered also in Terraform Cloud. Everything that i
 
 # Appendix
 
-#### SECURING KEYS
+## Securing keys
+In the case of using AWS provider the best practice for store credentials is having the keys in the AWS config file `.aws/credentials`, and not having the credentials anywhere in the Terraform code.
 
-In the case of using AWS provider the best practice for store credentials is having the keys in the AWS config file `.aws/credentials`, and not having the credentials in the Terraform code
-
-#### SENTINEL
-
+## Sentinel
 [Sentinel](https://www.hashicorp.com/sentinel) is an embedded policy-as-code framework integrated with the HashiCorp Enterprise products. It enables fine-grained, logic-based policy decisions, and can be extended to use information from external sources.
 
-#### SECRET INJECTION
-
+## Secret injection
 Vault allows you to manage secrets and protect sensitive data. Secure, store and tightly control access to tokens, passwords, certificates, encryption keys for protecting secrets and other sensitive data using a UI, CLI, or HTTP API.
 
-#### FILES TO UPLOAD
-
+## Files to be ignored by Git
 The following Terraform files should be ignored by Git when committing code to a repo:
-
-The `terraform.tfstate` or `.auto.tfvars` files contains the terraform state of a specific environment and doesn't need to be preserved in a repo. The `terraform.tfvars` file may contain sensitive data, such as passwords or IP addresses of an environment that you may not want to share with others.
+- The `terraform.tfstate` or `.auto.tfvars` files contains the terraform state of a specific environment and doesn't need to be preserved in a repo.
+- The `terraform.tfvars` file may contain sensitive data, such as passwords or IP addresses of an environment that you may not want to share with others.
 
 ## Debugging in Terraform
-
 Terraform has detailed logs which can be enabled by setting the `TF_LOG` environment variable to any value. This will cause detailed logs to appear on stderr.
 
-Is not about to Terraform Client Debugging, panic errors, go errors, etc. Is useful to provide the logs to Hashicorp.
-
-```
-export TF_LOG=TRACE
-
-```
+Is not about to Terraform Client Debugging, panic errors, go errors, etc. Is useful to provide the logs to Hashicorp. You can run the following command: `export TF_LOG=TRACE`.
 
 You can set `TF_LOG` to one of the log levels `TRACE`, `DEBUG`, `INFO`, `WARN` or `ERROR` to change the verbosity of the logs. `TRACE` is the most verbose and it is the default if `TF_LOG` is set to something other than a log level name.
 
@@ -1232,19 +1212,12 @@ You can set `TF_LOG` to one of the log levels `TRACE`, `DEBUG`, `INFO`, `W
 Link: <https://www.terraform.io/docs/internals/debugging.html>
 
 ## Miscellaneous
-
 -   A Terraform Enterprise install that is provisioned on a network that does not have Internet access is generally known as an _air-gapped_ install. These types of installs require you to pull updates, providers, etc. from external sources vs. being able to download them directly.
-
--   Terraform Enterprise requires a PostgresSQL for a clustered deployment.
-
--   Some backends supported: (1) Terraform Enterprise, (2) Consul, (3) AWS S3, (4) Artifactory.
-
--   Terraform Cloud supports the following VCS providers: GitHub, Gitlab, Bitbucket and Azure DevOps
-
+-   Terraform Enterprise requires _PostgresSQL_ for a clustered deployment.
+-   Some backends thtr are supported: (1) Terraform Enterprise, (2) Consul, (3) AWS S3, (4) Artifactory.
+-   Terraform Cloud supports the following VCS providers: (1) GitHub, (2) Gitlab, (2) Bitbucket and (4) Azure DevOps
 -   The existence of a provider plugin found locally in the working directory does not itself create a provider dependency. The plugin can exist without any reference to it in Terraform configuration.
-
 -   Function `index` finds the element index for a given value in a list starting with index 0.
-
 -   HashiCorp style conventions suggest you that align the equals sign for consecutive arguments for easing readability for configurations
 
     ```
@@ -1252,11 +1225,9 @@ Link: <https://www.terraform.io/docs/internals/debugging.html>
     instance_type = "t2.micro"
 
     ```
-
+    
 -   Terraform can limit the number of concurrent operations as Terraform [walks the graph](https://www.terraform.io/docs/internals/graph.html#walking-the-graph) using the [`-parallelism=n`](https://www.terraform.io/docs/commands/plan.html#parallelism-n) argument. The default value for this setting is `10`. This setting might be helpful if you're running into API rate limits.
-
--   HashiCorp style conventions state that you should use 2 spaces between each nesting level to improve the readability of Terraform configurations.
-
+-   HashiCorp style conventions state that you should use two spaces between each nesting level to improve the readability of Terraform configurations.
 -   Terraform supports the #, //, and /*..*/ for commenting Terraform configuration files. Please use them when writing Terraform so both you and others who are using your code have a full understanding of what the code is intended to do.
 
 -   The `terraform console` command provides an interactive console for evaluating [expressions](https://www.terraform.io/docs/configuration/expressions.html) such interpolations. <https://www.terraform.io/docs/commands/console.html>
