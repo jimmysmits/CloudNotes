@@ -970,15 +970,15 @@ Link: <https://www.terraform.io/docs/commands/state/push.html>
 > **Note**
 > Backends that support state lockings: (1) AzureRM, (2) Consul, (3) AWS S3
 
-## State in summary
--   Only ONE backend allowed
--   Secrets are stored in state
--   State locking when working with teams
--   State is stored in memory when using a remote backend
--   Standard and Enhanced backends
--   No interpolation allowed in backend setup
--   `terraform refresh` will attempt to resync the state
--   `terraform state push` will override the state
+> **Note**
+> - Only _one_ backend allowed
+> - Secrets are stored in state
+> - State locking when working with teams
+> - State is stored in memory when using a remote backend
+> - _Standard_ and _Enhanced_ backends
+> - No interpolation allowed in backend setup
+> - `terraform refresh` will attempt to re-sync the state
+> - `terraform state push` will override the state
 
 # Terraform Cloud & Enterprise
 
@@ -992,17 +992,17 @@ First we need to create an account on <https://app.terraform.io/signup/account>
 
 After that on Terraform Cloud web page we need to create an Organization, only we need to specified the name, and one email address, after that we can connect to our Git repository (GitHub, GitLab, Bitbucket and Azure DevOps are available), also we need to authorize Terraform Cloud in our Git repository, is only one click.
 
-Also, we can implement a Private module registry in Terraform Cloud.
+Also, we can implement a _Private module registry_ in Terraform Cloud.
 
 Now we need to create a Workspace on Terraform Cloud (is different to the Workspace on Terraform), this is for create a separate environment, for example dev, prod, etc.
 
 Right now we need to Configure Variables, because we used AWS provider, we need to configure the AWS credentials (Also we can configure using Vault)
 
-For the last, we need to configure a _Queue Plan_, this allow us to execute a `terraform plan` after this complete, we can Confirm & Apply
+Lastly, we need to configure a _Queue Plan_, this allow us to execute a `terraform plan` after this complete, we can Confirm & Apply
 
-> **Note** The remote backend stores Terraform state and may be used to run operations in Terraform Cloud. When using full remote operations, operations like `terraform plan` or `terraform apply` can be executed in Terraform Cloud's run environment, with log output streaming to the local terminal.
+> **Note** The remote backend stores the Terraform state and may be used to run operations in Terraform Cloud. When using full remote operations, operations like `terraform plan` or `terraform apply` can be executed in Terraform Cloud's run environment, with log output streaming to the local terminal.
 
-> **Note** Workspaces, managed with the `terraform workspace` command, aren't the same thing as Terraform Cloud's workspaces. Terraform Cloud workspaces act more like completely separate working directories; CLI workspaces are just alternate state files.
+> **Note** Workspaces, managed with the `terraform workspace` command, are not the same thing as Terraform Cloud's workspaces. Terraform Cloud workspaces act more like completely separate working directories; CLI workspaces are just alternate state files.
 
 > **Note** Terraform Cloud always encrypts state at rest and protects it with TLS in transit.
 
@@ -1021,7 +1021,7 @@ If we want to do a Destroy, we only need to click on the option "Queue destroy p
 
 Some paid features are Roles & Team management, Cost Estimation and Sentinel.
 
-Up to 5 users we can have the free tier, with VCS integration, Workspace Management, Secure Variable Storage, Remote Runs & Applies, Full API Coverage and Private Module Registry.
+Up to five users we can have the free tier, with VCS integration, Workspace Management, Secure Variable Storage, Remote Runs & Applies, Full API Coverage and Private Module Registry.
 
 Link: <https://www.hashicorp.com/products/terraform/pricing/>
 
