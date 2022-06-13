@@ -1,4 +1,5 @@
 https://justinoconnorcodes.files.wordpress.com/2021/09/terraform-cheatsheet-1.pdf
+https://res.cloudinary.com/acloud-guru/image/fetch/c_thumb,f_auto,q_auto/https://acg-wordpress-content-production.s3.us-west-2.amazonaws.com/app/uploads/2020/11/terraform-cheatsheet-from-ACG.pdf
 
 # Introduction
 - _Infrastructure as Code_ is the process of managing infrastructure in a file or files rather than manually configuring resources in a user interface. A resource in this instance is any piece of infrastructure in a given environment, such as a virtual machine, security group, network interface, etc.
