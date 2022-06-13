@@ -146,7 +146,7 @@ Link: <https://www.terraform.io/docs/configuration/terraform.html#specifying-a-
 ## (Input) Variables & Values
 ![](https://miro.medium.com/max/1400/1*_FWwGch6_ettk6ZvYPYwAw.png)[^1]
 
-## Input variables
+### Input variables
 
 It is useful to permit the user to set a variable manually when we run `terraform plan`, we can add a "description," and when we run a plan, it shows a message.
 
@@ -167,7 +167,7 @@ var.inputname
 
 ```
 
-## Ouput values
+### Ouput values
 
 Is about the resource we created, when we run `terraform apply` we can see the value, not in `terraform plan` because in the next case for example, we need first the VPC for know the vpc.id
 
@@ -187,7 +187,7 @@ vpcid = vpc-099d9099f5faec2d9
 
 ```
 
-## Local values
+### Local values
 
 A local value assigns a name to an [expression](https://www.terraform.io/docs/configuration/expressions.html), allowing it to be used multiple times within a module without repeating it.
 
@@ -213,17 +213,17 @@ Local values can be helpful to avoid repeating the same values or expressions mu
 
 Use local values only in moderation, in situations where a single value or result is used in many places *and* that value is likely to be changed in future. The ability to easily change the value in a central place is the key advantage of local values.
 
-## Environment variables
+### Environment variables
 
 We can create an export with our variable before execute `terraform plan`, and overwrite the value on the .tf files, for example `export TF_VAR_vpcname=envvpc`. This is useful for pass secrets or sensitive information in a secure form.
 
 ![](https://miro.medium.com/max/1400/1*a1XXIztHa2Et_g-pSftDSw.png)[^1]
 
-## CLI variables
+### CLI variables
 
 Another way to set variables is by using the command-line, for example `terraform plan -var="vpcname=cliname"`
 
-## TFVARS files
+### TFVARS files
 
 Passing variables inside a file, this is possible create a file called `terraform.tfvars` this file can be in a yaml or json notation, and is very simple, and also we can add maps, for example:
 
@@ -241,11 +241,11 @@ policy = {
 
 Link: <https://amazicworld.com/difference-between-variable-tf-and-variable-tfvars-in-terraform>
 
-## AUTO TFVARS
+### AUTO TFVARS
 
 This is for example using a file called `dev.auto.tfvars` (is the next file that look after look in the terraform.tfvars)
 
-## MULTIPLE VALUE FILES
+### MULTIPLE VALUE FILES
 
 We can create a specified `*.tvars` file and load for example with `terraform plan`, this is very useful to settings variables for different environments.
 
@@ -254,7 +254,7 @@ terraform plan -var-file=prod.tfvars
 
 ```
 
-## Load order
+### Load order
 
 -   Any -var and -var-file options on the command line, in order they are provided. (This includes variables set by a Terraform Cloud workspace.)
 -   Any *.auto.tfvars or *.auto.tfvars.json files, processed in lexical order of their filenames.
@@ -809,7 +809,7 @@ A `dynamic` block acts much like a `for` expression, but produces nested blo
 Link: <https://www.terraform.io/docs/configuration/expressions.html>
 
 
-#### Dependencies
+### Dependencies
 
 Explicitly specifying a dependency is only necessary when a resource relies on some other resource's behavior but *doesn't* access any of that resource's data in its arguments.
 
@@ -854,7 +854,7 @@ A data block request that Terraform read from a given data source and export the
 
 Link: <https://www.terraform.io/docs/providers/aws/d/instance.html>
 
-#### Built-in functions
+# Built-in functions
 
 The Terraform language includes a number of built-in functions that you can call from within expressions to transform and combine values. The general syntax for function calls is a function name followed by comma-separated arguments in parentheses:
 
