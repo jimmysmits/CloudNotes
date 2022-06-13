@@ -9,33 +9,29 @@ Configuration files describe to Terraform the components needed to run a single 
 
 The infrastructure Terraform can manage includes low-level components such as compute instances, storage, and networking, as well as high-level components such as DNS entries, SaaS features, etc.
 
-**Terraform's main features**
+**Terraform's main features**[^1]
 ![](https://miro.medium.com/max/1400/1*ozyZq7fXo1t10hvukS8KtQ.png)
-Source: https://medium.com/better-programming/how-terraform-works-a-visual-intro-6328cddbe067
 
-**How it works**
+**How it works**[^1]
 ![](https://miro.medium.com/max/1400/1*A1PWiPFasWKNePCgL6N_Cg.png)
-Source: https://medium.com/better-programming/how-terraform-works-a-visual-intro-6328cddbe067
-
 
 MANAGE INFRASTRUCTURE
 ---------------------
 
-### BLOCKS
+### BLOCKS[^1]
 ![](https://miro.medium.com/max/1400/1*b8enCRGjvJkO6texZBnEfg.png)
-Source: https://medium.com/better-programming/how-terraform-works-a-visual-intro-6328cddbe067
 
-#### TERRAFORM BLOCKS
+#### TERRAFORM BLOCKS[^1]
 ![](https://miro.medium.com/max/1400/1*3nnDHIS3zQ2W0CsGCjsHvQ.png)
-Source: https://medium.com/better-programming/how-terraform-works-a-visual-intro-6328cddbe067
 
-#### VARIABLES BLOCKS
+#### VARIABLES BLOCKS[^1]
 ![](https://miro.medium.com/max/1400/1*_FWwGch6_ettk6ZvYPYwAw.png)
-Source: https://medium.com/better-programming/how-terraform-works-a-visual-intro-6328cddbe067
 
-#### VARIABLES TYPES
+#### VARIABLES TYPES[^1]
 ![](https://miro.medium.com/max/1400/1*RgNuNbnxCekhoIu-PgG-1Q.png)
-Source: https://medium.com/better-programming/how-terraform-works-a-visual-intro-6328cddbe067
+Source[^1]
+
+[^1]: https://medium.com/better-programming/how-terraform-works-a-visual-intro-6328cddbe067
 
 Strings, Numbers, Boolean, List, or Maps. We can define a `default` value, example
 
@@ -166,12 +162,11 @@ Local values can be helpful to avoid repeating the same values or expressions mu
 
 Use local values only in moderation, in situations where a single value or result is used in many places *and* that value is likely to be changed in future. The ability to easily change the value in a central place is the key advantage of local values.
 
-#### ENVIRONMENT VARIABLES
+#### ENVIRONMENT VARIABLES[^1]
 
 We can create an export with our variable before execute `terraform plan`, and overwrite the value on the .tf files, for example `export TF_VAR_vpcname=envvpc`. This is useful for pass secrets or sensitive information in a secure form.
 
 ![](https://miro.medium.com/max/1400/1*a1XXIztHa2Et_g-pSftDSw.png)
-Source: https://medium.com/better-programming/how-terraform-works-a-visual-intro-6328cddbe067
 
 #### CLI VARIABLES
 
@@ -248,14 +243,13 @@ provider "aws" {
 
 Link: <https://www.terraform.io/docs/configuration/terraform.html#specifying-a-required-terraform-version>
 
-#### PROVIDERS
+#### PROVIDERS[^1]
 
 A provider is responsible for understanding API interactions and exposing resources. If an API is available, you can create a provider. A provider user a plugin. In order to make a provider available on Terraform, we need to make a `terraform init`, this commands download any plugins we need for our providers. If for example we need to copy the plugin directory manually, we can do it, moving the files to `.terraform.d/plugins`
 
 Note: Using `terraform providers` command we can view the specified version constraints for all providers used in the current configuration
 
 ![](https://miro.medium.com/max/1400/1*Vyb5RNl3PhxytQsD0vaH-w.png)
-Source: https://medium.com/better-programming/how-terraform-works-a-visual-intro-6328cddbe067
 
 Example configuration:
 
@@ -384,7 +378,7 @@ Links:
 -   <https://www.terraform.io/docs/provisioners/local-exec.html>
 -   <https://www.terraform.io/docs/provisioners/remote-exec.html>
 
-MASTER THE WORKFLOW
+MASTER THE WORKFLOW[^1]
 -------------------
 
 3 types of users, the workflow change according to the user
@@ -406,16 +400,14 @@ MASTER THE WORKFLOW
     -   Create: Before merging a second plan is run before approval to create
 
 ![](https://miro.medium.com/max/1400/1*E6p3Q7PGrlPtLSxaYxBtAQ.png)
-Source: https://medium.com/better-programming/how-terraform-works-a-visual-intro-6328cddbe067
 
-#### TERRAFORM INIT
+#### TERRAFORM INIT[^1]
 
 The `terraform init` command is used to initialize a working directory containing Terraform configuration files. It is safe to run this command multiple times, , this command will never delete your existing configuration or state. During init, the root configuration directory is consulted for [backend configuration](https://www.terraform.io/docs/backends/config.html) and the chosen backend is initialized using the given configuration settings.
 
 Link: <https://www.terraform.io/docs/commands/init.html>
 
 ![](https://miro.medium.com/max/1400/1*z6bsYznAVDzqvpfL3xxbXw.png)
-Source: https://medium.com/better-programming/how-terraform-works-a-visual-intro-6328cddbe067
 
 #### TERRAFORM VALIDATE
 
@@ -431,23 +423,21 @@ Note: Validation requires an initialized working directory with any referenced 
 
 Link: <https://www.terraform.io/docs/commands/validate.html>
 
-#### TERRAFORM PLAN
+#### TERRAFORM PLAN[^1]
 
 The `terraform plan` command is used to create an execution plan. Terraform performs a refresh, unless explicitly disabled, and then determines what actions are necessary to achieve the desired state specified in the configuration files.
 
 Link: <https://www.terraform.io/docs/commands/plan.html>
 
 ![](https://miro.medium.com/max/1400/1*3Y1M38zlOEnurCxBHbMg9w.png)
-Source: https://medium.com/better-programming/how-terraform-works-a-visual-intro-6328cddbe067
 
-#### TERRAFORM APPLY
+#### TERRAFORM APPLY[^1]
 
 The `terraform apply` command is used to apply the changes required to reach the desired state of the configuration, or the pre-determined set of actions generated by a `terraform plan` execution plan.
 
 Link: <https://www.terraform.io/docs/commands/apply.html>
 
 ![](https://miro.medium.com/max/1400/1*SSXJh0WapTdixVEg0GDVsA.png)
-Source: https://medium.com/better-programming/how-terraform-works-a-visual-intro-6328cddbe067
 
 #### TERRAFORM DESTROY
 
@@ -673,14 +663,14 @@ $ terraform state rm 'module.foo'
 
 Link: <https://www.terraform.io/docs/commands/state/rm.html>
 
-USE AND CREATE MODULES
+USE AND CREATE MODULES[^2]
 ----------------------
 
 A module is a simple directory that contains other .tf files. Using modules we can make the code reusable. Modules are local or remote.
 
 ![](https://miro.medium.com/max/1400/1*ItQg-iUT0O3QDiLoJBndJg.png)
 ![](https://miro.medium.com/max/1400/1*ilau3dR50ZfKadoc1_TO_w.png)
-Source: https://medium.com/@mfundo/terraform-modules-illustrate-26cbc48be83a
+[^2]: https://medium.com/@mfundo/terraform-modules-illustrate-26cbc48be83a
 
 #### TERRAFORM REGISTRY
 
@@ -688,7 +678,7 @@ Is the place to find modules, theses modules are verified by Hashicorp
 
 Link: <https://registry.terraform.io/>
 
-#### MODULES INPUTS/OUTPUTS
+#### MODULES INPUTS/OUTPUTS[^2]
 
 For make modules inputs we use inputs variables. Example module code:
 
@@ -738,30 +728,26 @@ output "dbprivateip" {
 
 ```
 ![](https://miro.medium.com/max/1400/1*nC50N58BRmDPkIKGHQOqbA.png)
-Source: https://medium.com/@mfundo/terraform-modules-illustrate-26cbc48be83a
 
-#### CHILD MODULES
+#### CHILD MODULES[^2]
 
 Terraform allow having child modules, modules within modules. Basically is a directory with tf files, with others directories with others sub modules. After add a subdirectory, remember to execute again `terraform init`
 
 ![](https://miro.medium.com/max/1400/1*7OER_lXpP-25B1LKW1lPOw.png)
-Source: https://medium.com/@mfundo/terraform-modules-illustrate-26cbc48be83a
 
-#### MODULE COMPOSITION
+#### MODULE COMPOSITION[^2]
 The key features of modules are _Re-usability_ and _Composability_. Below are some patterns to keep in mind when creating flexible, re-usable and composable modules.
 
 Keep a flat tree of module calls: try to avoid having children modules that have their own children: The [Terraform documentation](https://www.terraform.io/language/modules/develop/composition#module-composition) recommends only one level of child modules.
 ![](https://miro.medium.com/max/1400/1*N6YMOp-V3uQcF_sHFoztNA.png)
-Source: https://medium.com/@mfundo/terraform-modules-illustrate-26cbc48be83a
+
 
 Keep modules relatively small and pass in dependencies instead (_Dependency Inversion_).
 ![](https://miro.medium.com/max/1400/1*VOG5X8xSEiFCoAFenQ66hQ.png)
-Source: https://medium.com/@mfundo/terraform-modules-illustrate-26cbc48be83a
 In the example above the network creation is separated from the redis module. This makes it easy for the resources defined by the module to coexist with other infrastructure in the same network.
 
 Avoid complex conditional branches when creating objects within modules. Using an input variable is more declarative.
 ![](https://miro.medium.com/max/1400/1*expkYWhUbQfQLsOTYVXQxQ.png)
-Source: https://medium.com/@mfundo/terraform-modules-illustrate-26cbc48be83a
 
 READ AND WRITE CONFIGURATION
 ----------------------------
