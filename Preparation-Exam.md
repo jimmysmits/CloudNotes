@@ -15,16 +15,7 @@ The infrastructure Terraform can manage includes low-level components such as co
 Terraform creates and manages resources on cloud platforms and other services through their application programming interfaces (APIs). Providers enable Terraform to work with virtually any platform or service with an accessible API.
 ![](https://miro.medium.com/max/1400/1*A1PWiPFasWKNePCgL6N_Cg.png)[^1]
 
-# Blocks
-![](https://miro.medium.com/max/1400/1*b8enCRGjvJkO6texZBnEfg.png)[^1]
-
-## Terraform Settings
-![](https://miro.medium.com/max/1400/1*3nnDHIS3zQ2W0CsGCjsHvQ.png)[^1]
-
-## Variables
-![](https://miro.medium.com/max/1400/1*_FWwGch6_ettk6ZvYPYwAw.png)[^1]
-
-## Expressions
+# Expressions
 ![](https://miro.medium.com/max/1400/1*RgNuNbnxCekhoIu-PgG-1Q.png)[^1]
 
 [^1]: https://medium.com/better-programming/how-terraform-works-a-visual-intro-6328cddbe067
@@ -56,7 +47,7 @@ variable "sshport" {
 
 🗒️: Both _Number_ and _Integer_ don't need double quotes, but Terraform automatically converts _Number_ and _Boolean_ values to strings when needed. For example 5 and "5" both are correct.
 
-##### Variables type: List
+## Variables type: List
 
 _List_ is the same than an array. We can store multiple values. **Remember the first value is the 0 position**. For example to access the 0 position is `var.mylist[0]`.
 
@@ -68,7 +59,7 @@ variable "mylist" {
 
 ```
 
-##### Variables type: Map
+## Variables type: Map
 
 Is a Key:Value pair. We use the key to access to the value.
 
@@ -87,7 +78,7 @@ _Important:_ For example, if we need to access the value of Key1 (Value1) we ca
 
 🗒️: Remember, we use [ ] for list, and we use { } for maps
 
-##### Variables type: Tuple
+## Variables type: Tuple
 
 The difference between a _Tuple_ and a _List_, is on the _List_ we need to specified one type (string or numbers), and usingTtuple we can use multiple data-types
 
@@ -99,7 +90,7 @@ variable "mytuple" {
 
 ```
 
-##### Variables type: Object
+## Variables type: Object
 
 Similarly, using _Object_ we can use multiple data-types instead of a specified one for _Map_
 
@@ -116,125 +107,13 @@ variable "myobject" {
 
 🗒️: Using objects and tuples allows us to have multiple values of several distinct types to be grouped as a single value.
 
-#### Input variables
+# Blocks
+![](https://miro.medium.com/max/1400/1*b8enCRGjvJkO6texZBnEfg.png)[^1]
 
-It is useful to permit the user to set a variable manually when we run Terraform plan, we can add a "description," and when we run a plan, it shows a message.
+## Terraform Settings
+![](https://miro.medium.com/max/1400/1*3nnDHIS3zQ2W0CsGCjsHvQ.png)[^1]
 
-```
-variable "vpc_name" {
-    type = string
-    description = "Set VPC name"
-}
-
-```
-
-`terraform plan` example:
-
-```
-var.inputname
-	Set VPC name
-	Enter a value:
-
-```
-
-### Ouput
-
-Is about the resource we created, when we run `terraform apply` we can see the value, not in `terraform plan` because in the next case for example, we need first the VPC for know the vpc.id
-
-```
-output "vpc_id" {
-    value = "aws_vpc.myvpc.id"
-}
-
-```
-
-If we run `terraform apply` we can see the next message:
-
-```
-Apply complete!
-Outputs:
-vpcid = vpc-099d9099f5faec2d9
-
-```
-
-### Local values
-
-A local value assigns a name to an [expression](https://www.terraform.io/docs/configuration/expressions.html), allowing it to be used multiple times within a module without repeating it.
-
-Comparing modules to functions in a traditional programming language: if [input variables](https://www.terraform.io/docs/configuration/variables.html) are analogous to function arguments and [outputs values](https://www.terraform.io/docs/configuration/outputs.html) are analogous to function return values, then *local values* are comparable to a function's local temporary symbols.
-
-🗒️: For brevity, local values are often referred to as just "locals" when the meaning is clear from context.
-
-**Declaring a local value:**
-A set of related local values can be declared together in a single `locals` block.
-
-```
-locals {
-  service_name = "forum"
-  owner        = "Community Team"
-}
-
-```
-
-The expressions assigned to local value names can either be simple constants like the above, allowing these values to be defined only once but used many times, or they can be more complex expressions that transform or combine values from elsewhere in the module:
-
-**When to use local values:**
-Local values can be helpful to avoid repeating the same values or expressions multiple times in a configuration, but if overused they can also make a configuration hard to read by future maintainers by hiding the actual values used.
-
-Use local values only in moderation, in situations where a single value or result is used in many places *and* that value is likely to be changed in future. The ability to easily change the value in a central place is the key advantage of local values.
-
-#### Environment variables
-
-We can create an export with our variable before execute `terraform plan`, and overwrite the value on the .tf files, for example `export TF_VAR_vpcname=envvpc`. This is useful for pass secrets or sensitive information in a secure form.
-
-![](https://miro.medium.com/max/1400/1*a1XXIztHa2Et_g-pSftDSw.png)[^1]
-
-#### CLI variables
-
-Another way to set variables is by using the command-line, for example `terraform plan -var="vpcname=cliname"`
-
-#### TFVARS files
-
-Passing variables inside a file, this is possible create a file called `terraform.tfvars` this file can be in a yaml or json notation, and is very simple, and also we can add maps, for example:
-
-```
-vpcname = "tfvarsname"
-port = 22
-policy = {
-	test = 1
-	debug = "true"
-}
-
-```
-
-🗒️: The `terraform.tfvars` file is used to define variables and the `.tf` file declare that the variable exists.
-
-Link: <https://amazicworld.com/difference-between-variable-tf-and-variable-tfvars-in-terraform>
-
-#### AUTO TFVARS
-
-This is for example using a file called `dev.auto.tfvars` (is the next file that look after look in the terraform.tfvars)
-
-#### MULTIPLE VALUE FILES
-
-We can create a specified `*.tvars` file and load for example with `terraform plan`, this is very useful to settings variables for different environments.
-
-```
-terraform plan -var-file=prod.tfvars
-
-```
-
-## Load order
-
--   Any -var and -var-file options on the command line, in order they are provided. (This includes variables set by a Terraform Cloud workspace.)
--   Any *.auto.tfvars or *.auto.tfvars.json files, processed in lexical order of their filenames.
--   The tfvars.jsonfile, if present. `terraform.tfvars.json`
--   The tfvarsfile, if present. `terraform.tfvars`
--   Environment variables
-
-🗒️: there is no mention of .tf file declaration in there, this is because variables declared in .tf files are concatenated into a single entity consisting of your variables.tf your main.tf and your output.tf files before being processed by Terraform. Hence this declaration have highest precedence in order of application.
-
-## Versioning
+### Versioning
 
 The `required_version` setting can be used to constrain which versions of the Terraform CLI can be used with your configuration. If the running version of Terraform doesn't match the constraints specified, Terraform will produce an error and exit without taking any further actions.
 
@@ -264,7 +143,128 @@ provider "aws" {
 
 Link: <https://www.terraform.io/docs/configuration/terraform.html#specifying-a-required-terraform-version>
 
-### Providers
+## (Input) Variables & Values
+![](https://miro.medium.com/max/1400/1*_FWwGch6_ettk6ZvYPYwAw.png)[^1]
+
+## Input variables
+
+It is useful to permit the user to set a variable manually when we run `terraform plan`, we can add a "description," and when we run a plan, it shows a message.
+
+```
+variable "vpc_name" {
+    type = string
+    description = "Set VPC name"
+}
+
+```
+
+`terraform plan` example:
+
+```
+var.inputname
+	Set VPC name
+	Enter a value:
+
+```
+
+## Ouput values
+
+Is about the resource we created, when we run `terraform apply` we can see the value, not in `terraform plan` because in the next case for example, we need first the VPC for know the vpc.id
+
+```
+output "vpc_id" {
+    value = "aws_vpc.myvpc.id"
+}
+
+```
+
+If we run `terraform apply` we can see the next message:
+
+```
+Apply complete!
+Outputs:
+vpcid = vpc-099d9099f5faec2d9
+
+```
+
+## Local values
+
+A local value assigns a name to an [expression](https://www.terraform.io/docs/configuration/expressions.html), allowing it to be used multiple times within a module without repeating it.
+
+Comparing modules to functions in a traditional programming language: if [input variables](https://www.terraform.io/docs/configuration/variables.html) are analogous to function arguments and [outputs values](https://www.terraform.io/docs/configuration/outputs.html) are analogous to function return values, then *local values* are comparable to a function's local temporary symbols.
+
+🗒️: For brevity, local values are often referred to as just "locals" when the meaning is clear from context.
+
+**Declaring a local value:**
+A set of related local values can be declared together in a single `locals` block.
+
+```
+locals {
+  service_name = "forum"
+  owner        = "Community Team"
+}
+
+```
+
+The expressions assigned to local value names can either be simple constants like the above, allowing these values to be defined only once but used many times, or they can be more complex expressions that transform or combine values from elsewhere in the module:
+
+**When to use local values:**
+Local values can be helpful to avoid repeating the same values or expressions multiple times in a configuration, but if overused they can also make a configuration hard to read by future maintainers by hiding the actual values used.
+
+Use local values only in moderation, in situations where a single value or result is used in many places *and* that value is likely to be changed in future. The ability to easily change the value in a central place is the key advantage of local values.
+
+## Environment variables
+
+We can create an export with our variable before execute `terraform plan`, and overwrite the value on the .tf files, for example `export TF_VAR_vpcname=envvpc`. This is useful for pass secrets or sensitive information in a secure form.
+
+![](https://miro.medium.com/max/1400/1*a1XXIztHa2Et_g-pSftDSw.png)[^1]
+
+## CLI variables
+
+Another way to set variables is by using the command-line, for example `terraform plan -var="vpcname=cliname"`
+
+## TFVARS files
+
+Passing variables inside a file, this is possible create a file called `terraform.tfvars` this file can be in a yaml or json notation, and is very simple, and also we can add maps, for example:
+
+```
+vpcname = "tfvarsname"
+port = 22
+policy = {
+	test = 1
+	debug = "true"
+}
+
+```
+
+🗒️: The `terraform.tfvars` file is used to define variables and the `.tf` file declare that the variable exists.
+
+Link: <https://amazicworld.com/difference-between-variable-tf-and-variable-tfvars-in-terraform>
+
+## AUTO TFVARS
+
+This is for example using a file called `dev.auto.tfvars` (is the next file that look after look in the terraform.tfvars)
+
+## MULTIPLE VALUE FILES
+
+We can create a specified `*.tvars` file and load for example with `terraform plan`, this is very useful to settings variables for different environments.
+
+```
+terraform plan -var-file=prod.tfvars
+
+```
+
+## Load order
+
+-   Any -var and -var-file options on the command line, in order they are provided. (This includes variables set by a Terraform Cloud workspace.)
+-   Any *.auto.tfvars or *.auto.tfvars.json files, processed in lexical order of their filenames.
+-   The tfvars.jsonfile, if present. `terraform.tfvars.json`
+-   The tfvarsfile, if present. `terraform.tfvars`
+-   Environment variables
+
+🗒️: there is no mention of .tf file declaration in there, this is because variables declared in .tf files are concatenated into a single entity consisting of your variables.tf your main.tf and your output.tf files before being processed by Terraform. Hence this declaration have highest precedence in order of application.
+
+## Providers
 
 A provider is responsible for understanding API interactions and exposing resources. If an API is available, you can create a provider. A provider user a plugin. In order to make a provider available on Terraform, we need to make a `terraform init`, this commands download any plugins we need for our providers. If for example we need to copy the plugin directory manually, we can do it, moving the files to `.terraform.d/plugins`
 
@@ -294,7 +294,7 @@ $ terraform providers
 
 When `terraform init` is re-run with providers already installed, it will use an already-installed provider that meets the constraints in preference to downloading a new version. To upgrade to the latest acceptable version of each provider, run `terraform init -upgrade`. This command also upgrades to the latest versions of all Terraform modules.
 
-#### Multi-provider set-up
+### Multi-provider set-up
 
 We can use for example multiple AWS providers with different regions, for this we need to create an `alias` and on the resource creation we need to specified the provider. For example
 
@@ -314,8 +314,9 @@ resource "aws_vpc" "irlvpc" {
 }
 
 ```
+## Resource
 
-#### Provisioners
+### Provisioners
 
 _Provisioners_ can be used to model specific actions on the local machine or on a remote machine in order to prepare servers or other infrastructure objects for service.
 
@@ -335,11 +336,11 @@ resource "aws_instance" "web" {
 
 The `local-exec` provisioner requires no other configuration, but most other provisioners must connect to the remote system using SSH or WinRM.
 
-##### Creation-time provisioners
+#### Creation-time provisioners
 
 By default, provisioners run when the resource they are defined within is created. Creation-time provisioners are only run during *creation*, not during updating or any other lifecycle. They are meant as a means to perform bootstrapping of a system. If a creation-time provisioner fails, the resource is marked as tainted. A tainted resource will be planned for destruction and recreation upon the next `terraform apply`
 
-##### Destroy-time provisioners
+#### Destroy-time provisioners
 
 If `when = "destroy"` is specified, the provisioner will run when the resource it is defined within is *destroyed*.
 
