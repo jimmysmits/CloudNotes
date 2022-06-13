@@ -18,7 +18,7 @@ Terraform creates and manages resources on cloud platforms and other services th
 ## Configuration language
 The main purpose of the Terraform language is declaring resources, which represent infrastructure objects. All other language features exist only to make the definition of resources more flexible and convenient.
 
-A Terraform configuration is a complete document in the Terraform language (Hashicorp Configuration Language (HCL)) that tells Terraform how to manage a given collection of infrastructure. A configuration can consist of multiple files and directories.
+A Terraform configuration is a complete document in the Terraform language (Hashicorp Configuration Language, HCL) that tells Terraform how to manage a given collection of infrastructure. A configuration can consist of multiple files and directories.
 
 The syntax of the Terraform language consists of only a few basic elements:
 - **Blocks:** containers for other content and usually represent the configuration of some kind of object, like a resource. Blocks have a block type, can have zero or more labels, and have a body that contains any number of arguments and nested blocks. Most of Terraform's features are controlled by top-level blocks in a configuration file.
