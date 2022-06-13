@@ -4,7 +4,7 @@ _Infrastructure as Code_ it is the process of managing infrastructure in a file 
 
 _Terraform_ is a tool for building, changing, and versioning infrastructure safely and efficiently. Terraform can manage existing and popular service providers as well as custom in-house solutions.
 
-Configuration files describe to Terraform the components needed to run a single application or your entire datacenter. Terraform generates an execution plan describing what it will do to reach the desired state, and then executes it to build the described infrastructure. As the configuration changes, Terraform is able to determine what changed and create incremental execution plans which can be applied.
+_Configuration files_ describe to Terraform the components needed to run a single application or your entire datacenter. Terraform generates an execution plan describing what it will do to reach the desired state, and then executes it to build the described infrastructure. As the configuration changes, Terraform is able to determine what changed and create incremental execution plans which can be applied.
 
 The infrastructure Terraform can manage includes low-level components such as compute instances, storage, and networking, as well as high-level components such as DNS entries, SaaS features, etc.
 
@@ -47,7 +47,6 @@ variable "sshport" {
 > Both _Number_ and _Integer_ don't need double quotes, but Terraform automatically converts _Number_ and _Boolean_ values to strings when needed. For example 5 and "5" both are correct.
 
 ## Variables type: List
-
 _List_ is the same than an array. We can store multiple values. **Remember the first value is the 0 position**. For example to access the 0 position is `var.mylist[0]`.
 
 ```
@@ -59,7 +58,6 @@ variable "mylist" {
 ```
 
 ## Variables type: Map
-
 Is a Key:Value pair. We use the key to access to the value.
 
 ```
@@ -79,7 +77,6 @@ For example, if we need to access the value of Key1 (Value1) we can using the ne
 > Remember, we use [ ] for list, and we use { } for maps
 
 ## Variables type: Tuple
-
 The difference between a _Tuple_ and a _List_, is on the _List_ we need to specified one type (string or numbers), and usingTtuple we can use multiple data-types
 
 ```
@@ -91,7 +88,6 @@ variable "mytuple" {
 ```
 
 ## Variables type: Object
-
 Similarly, using _Object_ we can use multiple data-types instead of a specified one for _Map_
 
 ```
@@ -136,7 +132,7 @@ The Terraform language includes a few kinds of blocks for requesting or publishi
 - **Output values** are like return values for a Terraform module.
 - **Local values** are a convenience feature for assigning a short name to an expression.
 
-### (Input) variables
+### (Input) Variables
 Each input variable accepted by a module must be declared using a variable block.  Terraform CLI defines optional arguments for variable declarations.
 
 <img src="https://miro.medium.com/max/1400/1*_FWwGch6_ettk6ZvYPYwAw.png" width="800"/>[^1]
@@ -161,7 +157,7 @@ var.inputname
 
 ```
 
-#### Assigning Values to Root Module Variables
+#### Assigning values to root module variables
 When variables are declared in the root module of your configuration, they can be set in a number of ways: (1) in a Terraform Cloud workspace, (2) individually, with the `-var` command line option, (3) in variable definitions (`.tfvars`) files, (3a) either specified on the command line or (3b) automatically loaded or (4) as environment variables.
 
 <img src="https://miro.medium.com/max/1400/1*a1XXIztHa2Et_g-pSftDSw.png" width="800"/>[^1]
@@ -171,8 +167,9 @@ When variables are declared in the root module of your configuration, they can b
 To specify individual variables on the command line, use the -var option when running the `terraform plan` and `terraform apply` commands, for example `terraform plan -var="vpcname=cliname"`.
 
 ##### Variable definitions (`.tfvars`) files: via command line
-Passing variables inside a file, this is possible create a file called `terraform.tfvars` this file can be in a .yaml or .json notation, and is very simple, and also we can add maps, for example:
+To set lots of variables, it is more convenient to specify their values in a variable definitions file (with a filename ending in either `.tfvars` or `.tfvars.json`) and then specify that file on the command line with `-var-file`:
 
+Example:
 ```
 vpcname = "tfvarsname"
 port = 22
@@ -183,42 +180,40 @@ policy = {
 
 ```
 
+```
+terraform apply -var-file="testing.tfvars"
+```
+
 > **Note** 
 > This is how Terraform Cloud passes workspace variables to Terraform.
 
-> **Note** 
-> The `terraform.tfvars` file is used to define variables and the `.tf` file declare that the variable exists.
+> **Warning** 
+> The `terraform.tfvars` file is used to define variables whereas the `.tf` file declares that the variable exists.[^3]
 
-Link: <https://amazicworld.com/difference-between-variable-tf-and-variable-tfvars-in-terraform>
+[^3]: <https://amazicworld.com/difference-between-variable-tf-and-variable-tfvars-in-terraform>
 
 ##### Variable definitions (`.tfvars`) files: automatically loaded
-
-This is for example using a file called `dev.auto.tfvars` (is the next file that look after look in the terraform.tfvars)
-
-We can create a specified `*.tvars` file and load for example with `terraform plan`, this is very useful fir setting variables for different environments.
-
-```
-terraform plan -var-file=prod.tfvars
-
-```
+Terraform also automatically loads a number of variable definitions files if they are present. Files named exactly `terraform.tfvars` or `terraform.tfvars.json`. Also, any files with names ending in `*.auto.tfvars` or `*.auto.tfvars.json`, this is useful for setting variables for different environments.
 
 ##### Environment variables
-As a fallback for the other ways of defining variables, Terraform searches the environment of its own process for environment variables named `TF_VAR_...` followed by the name of a declared variable. We can create an export with our variable before execute `terraform plan`, and overwrite the value on the .tf files, for example `export TF_VAR_vpcname=envvpc`. This is useful to pass secrets or sensitive information in a secure way.
+As a fallback for the other ways of defining variables, Terraform searches the environment of its own process for environment variables named `TF_VAR_...` followed by the name of a declared variable. We can create an export with our variable before execute `terraform plan`, and overwrite the value on the `.tf` files, for example `export TF_VAR_vpcname=envvpc`. This is useful to pass secrets or sensitive information in a secure way.
 
-##### Load order
+##### Variable definition precedence
+Terraform loads variables in the following order, with **later** sources taking precedence over earlier ones:
 
--   Any -var and -var-file options on the command line, in order they are provided (this includes variables set by a Terraform Cloud workspace).
--   Any *.auto.tfvars or *.auto.tfvars.json files, processed in lexical order of their filenames.
--   The tfvars.jsonfile, if present. `terraform.tfvars.json`
--   The tfvarsfile, if present. `terraform.tfvars`
--   Environment variables
+- Environment variables
+- The `terraform.tfvars` file or the `terraform.tfvars.json` file, if present.
+- Any `*.auto.tfvars` or `*.auto.tfvars.json` files, processed in lexical order of their filenames.
+- Any `-var` and `-var-file` options on the command line, in the order they are provided (this includes variables set by a Terraform Cloud workspace).
 
 > **Note** 
-> There is no mention of .tf file declaration in there, this is because variables declared in .tf files are concatenated into a single entity consisting of your variables.tf your main.tf and your output.tf files before being processed by Terraform. Hence this declaration have highest precedence in order of application.
+> There is no mention of `.tf` file declaration here, this is because variables declared in `.tf` files are concatenated into a single entity consisting of your `variables.tf` your `main.tf` and your `output.tf` files before being processed by Terraform. Hence, this declaration has the highest precedence.
 
-### Ouput values
+### Ouput values (outputs)
+Output values make information about your infrastructure available on the command line, and can expose information for other Terraform configurations to use. Output values are similar to return values in programming languages.
 
-Is about the resource we created, when we run `terraform apply` we can see the value, not in `terraform plan` because in the next case for example, we need first the VPC for know the vpc.id
+> **Note**
+> For brevity, output values are often referred to as just "outputs" when the meaning is clear from contex. More importantly, oputputs are only rendered when Terraform applies your plan. Running `terraform plan` will not render outputs.
 
 ```
 output "vpc_id" {
@@ -227,7 +222,7 @@ output "vpc_id" {
 
 ```
 
-If we run `terraform apply` we can see the next message:
+If we run `terraform apply`, we will see the next message printed:
 
 ```
 Apply complete!
@@ -236,7 +231,7 @@ vpcid = vpc-099d9099f5faec2d9
 
 ```
 
-### Local values
+### Local values (locals)
 
 A local value assigns a name to an [expression](https://www.terraform.io/docs/configuration/expressions.html), allowing it to be used multiple times within a module without repeating it.
 
