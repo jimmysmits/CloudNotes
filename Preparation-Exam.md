@@ -1,5 +1,4 @@
 # Introduction
-
 - _Infrastructure as Code_ is the process of managing infrastructure in a file or files rather than manually configuring resources in a user interface. A resource in this instance is any piece of infrastructure in a given environment, such as a virtual machine, security group, network interface, etc.
 
 - _Terraform_ is a tool for building, changing, and versioning infrastructure safely and efficiently. Terraform can manage existing and popular service providers as well as custom in-house solutions.
@@ -42,8 +41,6 @@ resource "aws_vpc" "main" {
 
 The Terraform language is _declarative_, describing an intended goal rather than the steps to reach that goal. The ordering of blocks and the files they are organized into are generally not significant; Terraform only considers _implicit_ and _explicit_ relationships between resources when determining an order of operations.
 
-
-
 # Expressions
 [Expression](https://www.terraform.io/docs/configuration/expressions.html) are used to refer to or compute values within a configuration. The simplest expressions are just literal values, like `"hello"` or `5`, but the Terraform language also allows more complex expressions such as references to data exported by resources, arithmetic, conditional evaluation, and a number of built-in functions.
 
@@ -58,20 +55,17 @@ The Terraform language uses the following types for its values:
 	- _Structural types:_ `tuple` and `object`. A structural type allows multiple values of several distinct types to be grouped together as a single value. Structural types require a schema as an argument, to specify which types are allowed for which elements.
 
 We can define a `default` value for these types, for example:
-
 ```
 variable "vpcname" {
     type = string
     default = "myvpc"
 }
-
 ```
 
 ```
 variable "enabled" {
     default = true
 }
-
 ```
 
 ```
@@ -79,7 +73,6 @@ variable "sshport" {
     type = number
     default = 22
 }
-
 ```
 
 > **Note** 
@@ -94,7 +87,6 @@ variable "mylist" {
     type = list(string)
     default = ["Value1", "Value2"]
 }
-
 ```
 > **Note**
 > Remember the first value is the 0 position. For example, the 0 position can be accessed through the following command: `var.mylist[0]`.
@@ -110,7 +102,6 @@ variable "mymap" {
         Key2 = "Value2"
     }
 }
-
 ```
 
 For example, if we need to access the value of Key1 (Value1) we can use the the following command: `var.mymap["Key1"]`.
@@ -119,19 +110,20 @@ For example, if we need to access the value of Key1 (Value1) we can use the the 
 > Remember, we use `[ ]` for `list`, and we use `{ }` for `map`.
 
 ## Complex type: Tuple
-The difference between a `tuple` and a `list`, is that for `list` we need to specify one dinstinct data type (`string` or `number`), whereas using `tuple` we are able to use multiple data types
+The difference between a `tuple` and a `list`, is that for `list` we need to specify one dinstinct data type (`string` or `number`), whereas using `tuple` we are able to use multiple data types.
 
+Example:
 ```
 variable "mytuple" {
     type = tuple([string, number, string])
     default = ["cat", 1, "dog"]
 }
-
 ```
 
 ## Complex type: Object
-Similarly, using `object` we can use multiple data types instead of a specified one for `map`
+Similarly, using `object` we can use multiple data types instead of a specified one for `map`.
 
+Example:
 ```
 variable "myobject" {
     type = object({name = string, port = list(number)})
@@ -140,7 +132,6 @@ variable "myobject" {
         port = [22, 25, 80]
     }
 }
-
 ```
 
 > **Note** 
@@ -159,9 +150,10 @@ resource "aws_instance" "example" {
   }
 }
 ```
+
 A block has a type (`resource` in this example). Each block type defines how many labels must follow the type keyword. The resource block type expects two labels, which are `aws_instance` and `example` in the example above. A particular block type may have any number of required labels, or it may require none as with the nested `network_interface` block type.
 
-After the block type keyword and any labels, the block body is delimited by the `{` and `}` characters. Within the block body, further arguments and blocks may be nested, creating a hierarchy of blocks and their associated arguments.
+After the block type keyword and any labels, the block body is delimited by the `{ }` characters. Within the block body, further arguments and blocks may be nested, creating a hierarchy of blocks and their associated arguments.
 
 The Terraform language uses a limited number of top-level block types, which are blocks that can appear outside of any other block in a configuration file. Most of Terraform's features (including resources, input variables, output values, data sources, etc.) are implemented as top-level blocks.
 
@@ -187,16 +179,14 @@ variable "vpc_name" {
     type = string
     description = "Set VPC name"
 }
-
 ```
 
-`terraform plan` example:
+The `terraform plan` command will prompt the following:
 
 ```
 var.inputname
 	Set VPC name
 	Enter a value:
-
 ```
 
 #### Assigning values to root module variables
@@ -206,7 +196,7 @@ When variables are declared in the root module of your configuration, they can b
 
 
 ##### The `-var` command line option
-To specify individual variables on the command line, use the -var option when running the `terraform plan` and `terraform apply` commands, for example `terraform plan -var="vpcname=cliname"`.
+To specify individual variables on the command line, use the -var option when running the `terraform plan` and `terraform apply` commands, for example: `terraform plan -var="vpcname=cliname"`.
 
 ##### Variable definitions (`.tfvars`) files: via command line
 To set lots of variables, it is more convenient to specify their values in a variable definitions file (with a filename ending in either `.tfvars` or `.tfvars.json`) and then specify that file on the command line with `-var-file`:
@@ -219,7 +209,6 @@ policy = {
 	test = 1
 	debug = "true"
 }
-
 ```
 
 ```
@@ -242,7 +231,6 @@ As a fallback for the other ways of defining variables, Terraform searches the e
 
 ##### Variable definition precedence
 Terraform loads variables in the following order, with **later** sources taking precedence over earlier ones:
-
 - Environment variables
 - The `terraform.tfvars` file or the `terraform.tfvars.json` file, if present.
 - Any `*.auto.tfvars` or `*.auto.tfvars.json` files, processed in lexical order of their filenames.
@@ -261,7 +249,6 @@ Output values make information about your infrastructure available on the comman
 output "vpc_id" {
     value = "aws_vpc.myvpc.id"
 }
-
 ```
 
 If we run `terraform apply`, we will see the next message printed:
@@ -270,7 +257,6 @@ If we run `terraform apply`, we will see the next message printed:
 Apply complete!
 Outputs:
 vpcid = vpc-099d9099f5faec2d9
-
 ```
 
 ### Local values (locals)
@@ -290,7 +276,6 @@ locals {
   service_name = "forum"
   owner        = "Community Team"
 }
-
 ```
 
 The _expressions_ assigned to local value names can either be simple constants like the above, allowing these values to be defined only once but used many times, or they can be more complex expressions that transform or combine values from elsewhere in the module:
@@ -341,7 +326,6 @@ resource "aws_instance" "example" {
   instance_type = "t2.micro"
   depends_on = [aws_iam_role_policy.example]
 }
-
 ```
 
 The `depends_on` meta-argument, if present, must be a list of references to other resources in the same module.
@@ -356,7 +340,6 @@ _Provisioners_ can be used to model specific actions on the local machine or on 
 > Provisioners should only be used as a last resort. For most common situations there are better alternatives.
 
 Example:
-
 ```
 resource "aws_instance" "web" {
   # ...
@@ -364,17 +347,14 @@ resource "aws_instance" "web" {
     command = "echo The server's IP address is ${self.private_ip}"
   }
 }
-
 ```
 
 The `local-exec` provisioner requires no other configuration, but most other provisioners must connect to the remote system using SSH or WinRM.
 
 ##### Creation-time provisioners
-
 By default, provisioners run when the resource they are defined within is created. Creation-time provisioners are only run during *creation*, not during updating or any other lifecycle. They are meant as a means to perform bootstrapping of a system. If a creation-time provisioner fails, the resource is marked as tainted. A tainted resource will be planned for destruction and recreation upon the next `terraform apply`
 
 ##### Destroy-time provisioners
-
 If `when = "destroy"` is specified, the provisioner will run when the resource it is defined within is *destroyed*.
 
 ```
@@ -386,7 +366,6 @@ resource "aws_instance" "web" {
     command = "echo 'Destroy-time provisioner'"
   }
 }
-
 ```
 
 Destroy provisioners are run before the resource is destroyed. If they fail, Terraform will error and rerun the provisioners again on the next `terraform apply`
@@ -407,7 +386,6 @@ resource "null_resource" "generate-sshkey" {
         command = "yes y | ssh-keygen -b 4096 -t rsa -C 'terraform-vsphere-kubernetes' -N '' -f ${var.virtual_machine_kubernetes_controller.["private_key"]}"
     }
 }
-
 ```
 
 Another example for local-exec is execute a script for Download Lambda dependencies, and after that, make a zip.
@@ -424,7 +402,6 @@ One example for remote-exec is from the key create previously, we can configure 
       type          = "${var.virtual_machine_template.["connection_type"]}"
     }
   }
-
 ```
 
 ## Providers
@@ -436,23 +413,19 @@ Providers are plugins that implement resource types. A provider is responsible f
 <img src="https://miro.medium.com/max/1400/1*Vyb5RNl3PhxytQsD0vaH-w.png" width="800"/>[^1]
 
 Example configuration:
-
 ```
 terraform {
   required_providers {
     aws = "~> 2.7"
   }
 }
-
 ```
 
 Check:
-
 ```
 $ terraform providers
 .
 └── provider.aws ~> 2.7
-
 ```
 
 When `terraform init` is re-run with providers already installed, it will use an already-installed provider that meets the constraints in preference to downloading a new version. To upgrade to the latest acceptable version of each provider, run `terraform init -upgrade`. This command also upgrades to the latest versions of all Terraform modules.
@@ -475,18 +448,14 @@ resource "aws_vpc" "irlvpc" {
 	cidr_block = "10.0.0.0/16"
 	provider   = "aws.ireland"
 }
-
 ```
 
 ## Data sources
+Data sources allow Terraform to use information defined outside of Terraform, defined by another separate Terraform configuration, or modified by functions. Through data sources, Terraform can query AWS and return results (API request to get information). For example we can retrieve information of an EC2 serveron AWS (even without being created through Terraform).
 
-Data Sources are the way Terraform can query AWS and return results (Api request to get information)
+A data source is accessed via a special kind of resource known as a `data` resource, declared using a `data` block.
 
-Use of data sources allows a Terraform configuration to make use of information defined outside of Terraform, or defined by another separate Terraform configuration.
-
-For example we can information to an EC2 created on AWS without being created using Terraform,
-
-Example using a data source to know the AZ of an Instance created without Terraform, a print on the output command.
+Example of using a data source to retrieve the AZ of an EC2, the `output` block will print the AZ:
 
 ```
 # Find the latest available AMI that is tagged with Component = "DB server"
@@ -499,14 +468,11 @@ filter {
 output "dbserver" {
  value = data.aws_instance.dbsearch.availability_zone
 }
-
 ```
-
 A data block request that Terraform read from a given data source and export the result under the give local name.
 
 > **Note**
-> Data source attributes are interpolated with the general syntax *data.TYPE.NAME.ATTRIBUTE*. The interpolation for a resource is the same but without the *data.* prefix (TYPE.NAME.ATTRIBUTE).
-
+> Data source attributes are interpolated with the general syntax `*data.TYPE.NAME.ATTRIBUTE*`. The interpolation for a resource is the same but without the` *data.*` prefix (`TYPE.NAME.ATTRIBUTE`).
 
 ## Terraform Settings
 <img src="https://miro.medium.com/max/1400/1*3nnDHIS3zQ2W0CsGCjsHvQ.png" width="800"/>[^1]
@@ -518,7 +484,6 @@ A data block request that Terraform read from a given data source and export the
 terraform {
   required_version = ">= 0.12"
 }
-
 ```
 
 The value for `required_version` is a string containing a comma-separated list of constraints. Each constraint is an operator followed by a version number, such as `> 0.12.0`. The following constraint operators are allowed:
@@ -535,7 +500,6 @@ provider "aws" {
 	region = "us-east-1"
 	version = ">= 2.9.0"
 }
-
 ```
 
 ## Dynamic blocks
@@ -558,7 +522,6 @@ resource "aws_elastic_beanstalk_environment" "tfenvtest" {
     }
   }
 }
-
 ```
 
 A `dynamic` block acts much like a `for` expression, but produces nested blocks instead of a complex typed value. It iterates over a given complex value, and generates a nested block for each element of that complex value.
@@ -588,7 +551,6 @@ resource "aws_instance" "myec2db" {
 		Name = var.dbname
 	}
 }
-
 ```
 
 Call to the module example:
@@ -598,7 +560,6 @@ module "dbserver" {
 	source = "./db"
 	dbname = "mydbserver"
 }
-
 ```
 
 Module outputs are very similar to module inputs, an example in a module output:
@@ -607,7 +568,6 @@ Module outputs are very similar to module inputs, an example in a module output:
 output "privateip" {
 	value = aws_instance.myec2db.private_ip
 }
-
 ```
 
 When we use a module with an output, to use the output we need to specified in the call to our module, for example:
@@ -621,7 +581,6 @@ module "dbserver" {
 output "dbprivateip" {
 	value = module.dbserver.privateip
 }
-
 ```
 <img src="https://miro.medium.com/max/1400/1*nC50N58BRmDPkIKGHQOqbA.png" width="800"/>[^2]
 
@@ -905,7 +864,6 @@ The last important function is `lookup`, this retrieves the value of a single e
 
 ```
 lookup(map, key, default)
-
 ```
 
 Examples:
@@ -926,7 +884,7 @@ Links:
 # State
 
 ## Local state
-The local backend stores state on the local filesystem, locks that state using system APIs, and performs operations locally.
+The local backend stores state on the local file system, locks that state using system APIs, and performs operations locally.
 
 ```
 terraform {
@@ -960,11 +918,9 @@ $ terraform plan
 
 ```
 
-`refresh` is good practice to sync changes, in some cases it iss better to use `terraform import` depending on the complexity.
-
+`refresh` is good practice to sync changes, in some cases it is better to use `terraform import` depending on the complexity.
 
 ## Remote backends
-
 Stores the state as a given key in a given bucket on [Amazon S3](https://aws.amazon.com/s3/). This backend also supports state locking and consistency checking via [Dynamo DB](https://aws.amazon.com/dynamodb/), which can be enabled by setting the `dynamodb_table` field to an existing DynamoDB table name. A single DynamoDB table can be used to lock multiple remote state files. Terraform generates key names that include the values of the `bucket` and `key` variables.
 
 Example:
@@ -977,7 +933,6 @@ terraform {
     region = "us-east-1"
   }
 }
-
 ```
 
 > **Note**
@@ -997,25 +952,22 @@ If we want to change from S3 backend to Local backend, only we need to do `terr
 When we use Terraform is only allowed one backend. The state cannot store secrets, for that reason we need to encrypt at rest.
 
 ## terraform force-unlock
-Manually unlock the state for the defined configuration. This will not modify your infrastructure. This command removes the lock on the state for the current configuration. The behavior of this lock is dependent on the backend being used. Local state files cannot be unlocked by another process.
+[The `terraform force-unlock` command](<https://www.terraform.io/docs/commands/force-unlock.html) will manually unlock the state for the defined configuration. This will not modify your infrastructure. This command removes the lock on the state for the current configuration. The behavior of this lock is dependent on the backend being used. Local state files cannot be unlocked by another process.
 
 Usage: `terraform force-unlock LOCK_ID [DIR]`
 
 This is useful for example when another person write the remote state file, and something happening and the state file is lock, and we need to release.
 
-Link: <https://www.terraform.io/docs/commands/force-unlock.html>
-
 ## Terraform Cloud
 If we need the best solution for encryption and backups, the answer is Terraform Cloud. Terraform Cloud encrypt the state file at rest, and also encrypt using TLS.
 
-## STATE IN MEMORY
+## State in memory
 When we use remote states, Terraform save all the temporal information in memory, nothing persistent on disk, this is another Terraform security implementation.
 
-## BACKEND AND STRING INTERPOLATION
-Backend cannot have any interpolations or use any variables. This need to be manually hardcoded
+## Backend & string interpolation
+Backend cannot have any interpolations or use any variables. This need to be manually hardcoded.
 
 ## terraform state push
-
 The `terraform state push` command is used to manually upload a local state file to [remote state](https://www.terraform.io/docs/state/remote.html). This command also works with local state.
 
 Usage: `terraform state push [options] PATH`
@@ -1023,15 +975,13 @@ Usage: `terraform state push [options] PATH`
 Link: <https://www.terraform.io/docs/commands/state/push.html>
 
 ## Types of backend
-
--   Standard: state management, storage and locking
--   Enhanced: Only on Terraform Cloud, standard + can run operations remotely
+-   **Standard:** state management, storage and locking
+-   **Enhanced:** Only on Terraform Cloud, standard + can run operations remotely
 
 > **Note**
 > Backends that support state lockings: (1) AzureRM, (2) Consul, (3) AWS S3
 
 ## State in summary
-
 -   Only ONE backend allowed
 -   Secrets are stored in state
 -   State locking when working with teams
@@ -1041,17 +991,14 @@ Link: <https://www.terraform.io/docs/commands/state/push.html>
 -   `terraform refresh` will attempt to resync the state
 -   `terraform state push` will override the state
 
-
 # Terraform Cloud & Enterprise
 
 ## Terraform Cloud
-
 Terraform Cloud (TFC) is a free to use, self-service SaaS platform that extends the capabilities of the open source Terraform CLI and adds collaboration and automation features.
 
 Terraform Cloud enables connecting to common VCS platforms (GitHub, GitLab, Bitbucket) and triggering Terraform runs (plan and apply) from changes to configuration within the VCS. TFC manages state for the user, including keeping a history of changes. Terraform Cloud exposes an HTTP API that anyone can integrate with to build more automation around infrastructure change.
 
 ## Terraform Cloud set-up
-
 First we need to create an account on <https://app.terraform.io/signup/account> and create a new Git repository, and upload our `.tf` files.
 
 After that on Terraform Cloud web page we need to create an Organization, only we need to specified the name, and one email address, after that we can connect to our Git repository (GitHub, GitLab, Bitbucket and Azure DevOps are available), also we need to authorize Terraform Cloud in our Git repository, is only one click.
@@ -1062,7 +1009,7 @@ Now we need to create a Workspace on Terraform Cloud (is different to the Worksp
 
 Right now we need to Configure Variables, because we used AWS provider, we need to configure the AWS credentials (Also we can configure using Vault)
 
-For the last, we need to configure a Queue Plan, this allow us to execute a `Terraform plan` after this complete, we can Confirm & Apply
+For the last, we need to configure a _Queue Plan_, this allow us to execute a `terraform plan` after this complete, we can Confirm & Apply
 
 > **Note** The remote backend stores Terraform state and may be used to run operations in Terraform Cloud. When using full remote operations, operations like `terraform plan` or `terraform apply` can be executed in Terraform Cloud's run environment, with log output streaming to the local terminal.
 
