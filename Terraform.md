@@ -25,6 +25,10 @@ MANAGE INFRASTRUCTURE
 ![](https://miro.medium.com/max/1400/1*b8enCRGjvJkO6texZBnEfg.png)
 Source: https://medium.com/better-programming/how-terraform-works-a-visual-intro-6328cddbe067
 
+#### TERRAFORM BLOCKS
+![](https://miro.medium.com/max/1400/1*3nnDHIS3zQ2W0CsGCjsHvQ.png)
+Source: https://medium.com/better-programming/how-terraform-works-a-visual-intro-6328cddbe067
+
 #### VARIABLES BLOCKS
 ![](https://miro.medium.com/max/1400/1*_FWwGch6_ettk6ZvYPYwAw.png)
 Source: https://medium.com/better-programming/how-terraform-works-a-visual-intro-6328cddbe067
@@ -896,7 +900,7 @@ what?
 
 Links:
 
--   [https://www.terraform.io/docs/configuration/functions.html](about:blank)
+-   <https://www.terraform.io/docs/configuration/functions.html>
 -   <https://www.terraform.io/docs/configuration/expressions.html#function-calls>
 
 #### SECURING KEYS
