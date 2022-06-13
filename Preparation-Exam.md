@@ -112,12 +112,27 @@ variable "myobject" {
 <img src="https://miro.medium.com/max/1400/1*b8enCRGjvJkO6texZBnEfg.png" width="600"/>[^1]
 
 ## (Input) Variables & Values
+The Terraform language includes a few kinds of blocks for requesting or publishing named values.
+
+- **Input variables** serve as parameters for a Terraform module, so users can customize behavior without editing the source.
+- **Output values** are like return values for a Terraform module.
+- **Local values** are a convenience feature for assigning a short name to an expression.
+
 <img src="https://miro.medium.com/max/1400/1*_FWwGch6_ettk6ZvYPYwAw.png" width="800"/>[^1]
 
-### Input variables
+### (Input) variables
+Terraform CLI defines the following optional arguments for variable declarations:
 
-It is useful to permit the user to set a variable manually when we run `terraform plan`, we can add a "description," and when we run a plan, it shows a message.
+- `default` - A default value which then makes the variable optional.
+- `type` - This argument specifies what value types are accepted for the variable.
+- `description` - This specifies the input variable's documentation.
+- `validation` - A block to define validation rules, usually in addition to type constraints.
+- `sensitive` - Limits Terraform UI output when the variable is used in configuration.
+- `nullable` - Specify if the variable can be null within the module.
 
+Input variables permit the end-user to set a variable manually after running `terraform plan`, we can add a "description," and when we run a plan, it shows a message.
+
+Example:
 ```
 variable "vpc_name" {
     type = string
