@@ -16,7 +16,7 @@ Terraform creates and manages resources on cloud platforms and other services th
 ![](https://miro.medium.com/max/1400/1*A1PWiPFasWKNePCgL6N_Cg.png)[^1]
 
 # Expressions
-<img src="https://miro.medium.com/max/1400/1*RgNuNbnxCekhoIu-PgG-1Q.png" width ="500"/>[^1]
+<img src="https://miro.medium.com/max/1400/1*RgNuNbnxCekhoIu-PgG-1Q.png" width ="900"/>[^1]
 
 _String_, _Number_, _Boolean_, _List_, _Map_, _Tuple_ or _Object_. We can define a `default` value, for example:
 
@@ -109,10 +109,10 @@ variable "myobject" {
 > Using objects and tuples allows us to have multiple values of several distinct types to be grouped as a single value.
 
 # Blocks
-<img src="https://miro.medium.com/max/1400/1*b8enCRGjvJkO6texZBnEfg.png" width="500"/>[^1]
+<img src="https://miro.medium.com/max/1400/1*b8enCRGjvJkO6texZBnEfg.png" width="600"/>[^1]
 
 ## Terraform Settings
-<img src="https://miro.medium.com/max/1400/1*3nnDHIS3zQ2W0CsGCjsHvQ.png" width="500"/>[^1]
+<img src="https://miro.medium.com/max/1400/1*3nnDHIS3zQ2W0CsGCjsHvQ.png" width="800"/>[^1]
 
 ### Versioning
 
@@ -145,7 +145,7 @@ provider "aws" {
 Link: <https://www.terraform.io/docs/configuration/terraform.html#specifying-a-required-terraform-version>
 
 ## (Input) Variables & Values
-![](https://miro.medium.com/max/1400/1*_FWwGch6_ettk6ZvYPYwAw.png)[^1]
+<img src="https://miro.medium.com/max/1400/1*_FWwGch6_ettk6ZvYPYwAw.png" width="800"/>[^1]
 
 ### Input variables
 
@@ -219,7 +219,7 @@ Use local values only in moderation, in situations where a single value or resul
 
 We can create an export with our variable before execute `terraform plan`, and overwrite the value on the .tf files, for example `export TF_VAR_vpcname=envvpc`. This is useful for pass secrets or sensitive information in a secure form.
 
-<img src="https://miro.medium.com/max/1400/1*a1XXIztHa2Et_g-pSftDSw.png" width="500"/>[^1]
+<img src="https://miro.medium.com/max/1400/1*a1XXIztHa2Et_g-pSftDSw.png" width="800"/>[^1]
 
 ### CLI variables
 
@@ -275,7 +275,7 @@ A provider is responsible for understanding API interactions and exposing resour
 > **Note** 
 > Using `terraform providers` command we can view the specified version constraints for all providers used in the current configuration
 
-<img src="https://miro.medium.com/max/1400/1*Vyb5RNl3PhxytQsD0vaH-w.png" width="500"/>[^1]
+<img src="https://miro.medium.com/max/1400/1*Vyb5RNl3PhxytQsD0vaH-w.png" width="800"/>[^1]
 
 Example configuration:
 
@@ -805,15 +805,15 @@ Terraform allow having child modules, modules within modules. Basically is a dir
 The key features of modules are _Re-usability_ and _Composability_. Below are some patterns to keep in mind when creating flexible, re-usable and composable modules.
 
 - Keep a flat tree of module calls: try to avoid having children modules that have their own children: The [Terraform documentation](https://www.terraform.io/language/modules/develop/composition#module-composition) recommends only one level of child modules.
-![](https://miro.medium.com/max/1400/1*N6YMOp-V3uQcF_sHFoztNA.png)[^2]
+<img src="https://miro.medium.com/max/1400/1*N6YMOp-V3uQcF_sHFoztNA.png" width="600"/>[^2]
 
 
 - Keep modules relatively small and pass in dependencies instead (_Dependency Inversion_).
-![](https://miro.medium.com/max/1400/1*VOG5X8xSEiFCoAFenQ66hQ.png)
+<img src="https://miro.medium.com/max/1400/1*VOG5X8xSEiFCoAFenQ66hQ.png" width="600"/>[^2]
 In the example above the network creation is separated from the redis module. This makes it easy for the resources defined by the module to coexist with other infrastructure in the same network.
 
 - Avoid complex conditional branches when creating objects within modules. Using an input variable is more declarative.
-![](https://miro.medium.com/max/1400/1*expkYWhUbQfQLsOTYVXQxQ.png)
+<img src="https://miro.medium.com/max/1400/1*expkYWhUbQfQLsOTYVXQxQ.png" width="600"/>[^2]
 
 
 ## DYNAMIC BLOCKS
