@@ -1,23 +1,23 @@
 # Cloud Certifications Notes.
 
 ## Notes for AWS Certifications.
-- [AWS Cloud Practitioner](/CloudNotes/CPP.html)
-- [AWS Solutions Architect Associate](/CloudNotes/SAA.html)
-- [AWS Developer Associate](/CloudNotes/CDA.html)
-- [AWS SysOps Associate](/CloudNotes/SysOpsAssociate.html)
+- [AWS Cloud Practitioner](/CPP.md)
+- [AWS Solutions Architect Associate](/SAA.md)
+- [AWS Developer Associate](/CDA.md)
+- [AWS SysOps Associate](/SysOpsAssociate.md)
 
 Please check out these amazing CheatSheets:
 - [TutorialDojo Cheat Sheets](https://tutorialsdojo.com/aws-cheat-sheets/)
 - [DigitalCloud Cheat Sheets](https://digitalcloud.training/certification-training/)
 
 ## Notes for Linux Certifications.
-- [LPI Linux Essentials](/CloudNotes/LPILinuxEssentials.html)
+- [LPI Linux Essentials](/LPILinuxEssentials.md)
 
 ## Notes for Azure Certfications.
-- [Azure Fundamentals : AZ-900](/CPP.md)
+- [Azure Fundamentals : AZ-900](/AzureFundamentals.md)
 
 ## Notes for Terraform Certifications.
-- [Terraform Associate Certification](/CloudNotes/Terraform.html)
+- [Terraform Associate Certification](/Terraform.md)
 
 ## Notes for OCI Certifications.
-- [OCI Foundations Associate](/CloudNotes/OCIFA.html)
+- [OCI Foundations Associate](/OCIFA.md)
