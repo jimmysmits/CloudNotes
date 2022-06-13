@@ -9,16 +9,14 @@ Configuration files describe to Terraform the components needed to run a single 
 The infrastructure Terraform can manage includes low-level components such as compute instances, storage, and networking, as well as high-level components such as DNS entries, SaaS features, etc.
 
 ## Terraform's main features
-![](https://miro.medium.com/max/1400/1*ozyZq7fXo1t10hvukS8KtQ.png)[^1]
+<img src="https://miro.medium.com/max/1400/1*ozyZq7fXo1t10hvukS8KtQ.png" width="500"/>[^1]
 
 ## How it works
 Terraform creates and manages resources on cloud platforms and other services through their application programming interfaces (APIs). Providers enable Terraform to work with virtually any platform or service with an accessible API.
 ![](https://miro.medium.com/max/1400/1*A1PWiPFasWKNePCgL6N_Cg.png)[^1]
 
 # Expressions
-![](https://miro.medium.com/max/1400/1*RgNuNbnxCekhoIu-PgG-1Q.png)[^1]
-
-[^1]: https://medium.com/better-programming/how-terraform-works-a-visual-intro-6328cddbe067
+<img src="https://miro.medium.com/max/1400/1*RgNuNbnxCekhoIu-PgG-1Q.png" width ="500"/>[^1]
 
 _String_, _Number_, _Boolean_, _List_, _Map_, _Tuple_ or _Object_. We can define a `default` value, for example:
 
@@ -111,10 +109,10 @@ variable "myobject" {
 > Using objects and tuples allows us to have multiple values of several distinct types to be grouped as a single value.
 
 # Blocks
-![](https://miro.medium.com/max/1400/1*b8enCRGjvJkO6texZBnEfg.png)[^1]
+<img src="https://miro.medium.com/max/1400/1*b8enCRGjvJkO6texZBnEfg.png" width="500"/>[^1]
 
 ## Terraform Settings
-![](https://miro.medium.com/max/1400/1*3nnDHIS3zQ2W0CsGCjsHvQ.png)[^1]
+<img src="https://miro.medium.com/max/1400/1*3nnDHIS3zQ2W0CsGCjsHvQ.png" width="500"/>[^1]
 
 ### Versioning
 
@@ -210,7 +208,7 @@ locals {
 
 ```
 
-The expressions assigned to local value names can either be simple constants like the above, allowing these values to be defined only once but used many times, or they can be more complex expressions that transform or combine values from elsewhere in the module:
+The _expressions_ assigned to local value names can either be simple constants like the above, allowing these values to be defined only once but used many times, or they can be more complex expressions that transform or combine values from elsewhere in the module:
 
 **When to use local values:**
 Local values can be helpful to avoid repeating the same values or expressions multiple times in a configuration, but if overused they can also make a configuration hard to read by future maintainers by hiding the actual values used.
@@ -221,7 +219,7 @@ Use local values only in moderation, in situations where a single value or resul
 
 We can create an export with our variable before execute `terraform plan`, and overwrite the value on the .tf files, for example `export TF_VAR_vpcname=envvpc`. This is useful for pass secrets or sensitive information in a secure form.
 
-![](https://miro.medium.com/max/1400/1*a1XXIztHa2Et_g-pSftDSw.png)[^1]
+<img src="https://miro.medium.com/max/1400/1*a1XXIztHa2Et_g-pSftDSw.png" width="500"/>[^1]
 
 ### CLI variables
 
@@ -277,7 +275,7 @@ A provider is responsible for understanding API interactions and exposing resour
 > **Note** 
 > Using `terraform providers` command we can view the specified version constraints for all providers used in the current configuration
 
-![](https://miro.medium.com/max/1400/1*Vyb5RNl3PhxytQsD0vaH-w.png)[^1]
+<img src="https://miro.medium.com/max/1400/1*Vyb5RNl3PhxytQsD0vaH-w.png" width="500"/>[^1]
 
 Example configuration:
 
@@ -465,7 +463,7 @@ There are three types of users, the workflow changes based on the user type
     -   Plan: When a PR is raised, Terraform Plan is run
     -   Create: Before merging a second plan is run before approval to create
 
-![](https://miro.medium.com/max/1400/1*E6p3Q7PGrlPtLSxaYxBtAQ.png)[^1]
+<img src="https://miro.medium.com/max/1400/1*E6p3Q7PGrlPtLSxaYxBtAQ.png" width="500"/>[^1]
 
 ### terraform init
 
@@ -473,7 +471,7 @@ The `terraform init` command is used to initialize a working directory contain
 
 Link: <https://www.terraform.io/docs/commands/init.html>
 
-![](https://miro.medium.com/max/1400/1*z6bsYznAVDzqvpfL3xxbXw.png)[^1]
+<img src="https://miro.medium.com/max/1400/1*z6bsYznAVDzqvpfL3xxbXw.png" width="500"/>[^1]
 
 ### terraform validate
 
@@ -496,7 +494,7 @@ The `terraform plan` command is used to create an execution plan. Terraform pe
 
 Link: <https://www.terraform.io/docs/commands/plan.html>
 
-![](https://miro.medium.com/max/1400/1*3Y1M38zlOEnurCxBHbMg9w.png)[^1]
+<img src="https://miro.medium.com/max/1400/1*3Y1M38zlOEnurCxBHbMg9w.png" width="500"/>[^1]
 
 ### terraform apply
 
@@ -504,7 +502,7 @@ The `terraform apply` command is used to apply the changes required to reach t
 
 Link: <https://www.terraform.io/docs/commands/apply.html>
 
-![](https://miro.medium.com/max/1400/1*SSXJh0WapTdixVEg0GDVsA.png)[^1]
+<img src="https://miro.medium.com/max/1400/1*SSXJh0WapTdixVEg0GDVsA.png" width="500"/>[^1]
 
 ### terraform destroy
 
@@ -741,7 +739,6 @@ A module is a simple directory that contains other .tf files. Using modules we c
 
 ![](https://miro.medium.com/max/1400/1*ItQg-iUT0O3QDiLoJBndJg.png)[^2]
 ![](https://miro.medium.com/max/1400/1*ilau3dR50ZfKadoc1_TO_w.png)[^2]
-[^2]: https://medium.com/@mfundo/terraform-modules-illustrate-26cbc48be83a
 
 ### TERRAFORM REGISTRY
 
@@ -1192,3 +1189,6 @@ Link: <https://www.terraform.io/docs/internals/debugging.html>
 -   Terraform supports the #, //, and /*..*/ for commenting Terraform configuration files. Please use them when writing Terraform so both you and others who are using your code have a full understanding of what the code is intended to do.
 
 -   The `terraform console` command provides an interactive console for evaluating [expressions](https://www.terraform.io/docs/configuration/expressions.html) such interpolations. <https://www.terraform.io/docs/commands/console.html>
+
+[^1]: https://medium.com/better-programming/how-terraform-works-a-visual-intro-6328cddbe067
+[^2]: https://medium.com/@mfundo/terraform-modules-illustrate-26cbc48be83a
