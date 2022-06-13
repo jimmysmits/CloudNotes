@@ -42,7 +42,7 @@ resource "aws_vpc" "main" {
 The Terraform language is _declarative_, describing an intended goal rather than the steps to reach that goal. The ordering of blocks and the files they are organized into are generally not significant; Terraform only considers _implicit_ and _explicit_ relationships between resources when determining an order of operations.
 
 # Expressions
-[Expression](https://www.terraform.io/docs/configuration/expressions.html) are used to refer to or compute values within a configuration. The simplest expressions are just literal values, like `"hello"` or `5`, but the Terraform language also allows more complex expressions such as references to data exported by resources, arithmetic, conditional evaluation, and a number of built-in functions.
+[Expressions](https://www.terraform.io/docs/configuration/expressions) are used to refer to or compute values within a configuration. The simplest expressions are just literal values, like `"hello"` or `5`, but the Terraform language also allows more complex expressions such as references to data exported by resources, arithmetic, conditional evaluation, and a number of built-in functions.
 
 The result of an expression is a value. All values have a [type](https://www.terraform.io/language/expressions/types#types=), which dictates where that value can be used and what transformations can be applied to it.
 
@@ -261,9 +261,9 @@ vpcid = vpc-099d9099f5faec2d9
 
 ### Local values (locals)
 
-A local value assigns a name to an [expression](https://www.terraform.io/docs/configuration/expressions.html), allowing it to be used multiple times within a module without repeating it.
+A local value assigns a name to an [expression](https://www.terraform.io/docs/configuration/expressions), allowing it to be used multiple times within a module without repeating it.
 
-Comparing modules to functions in a traditional programming language: if [input variables](https://www.terraform.io/docs/configuration/variables.html) are analogous to function arguments and [outputs values](https://www.terraform.io/docs/configuration/outputs.html) are analogous to function return values, then *local values* are comparable to a function's local temporary symbols.
+Comparing modules to functions in a traditional programming language: if [input variables](https://www.terraform.io/docs/configuration/variables) are analogous to function arguments and [outputs values](https://www.terraform.io/docs/configuration/outputs) are analogous to function return values, then *local values* are comparable to a function's local temporary symbols.
 
 > **Note** 
 > For brevity, local values are often referred to as just "locals" when the meaning is clear from context.
@@ -330,7 +330,7 @@ resource "aws_instance" "example" {
 
 The `depends_on` meta-argument, if present, must be a list of references to other resources in the same module.
 
-Link: <https://www.terraform.io/docs/providers/aws/d/instance.html>
+Link: <https://www.terraform.io/docs/providers/aws/d/instance>
 
 #### Provisioners
 
@@ -375,8 +375,8 @@ Destroy provisioners are run before the resource is destroyed. If they fail, Ter
 
 ##### Local-Exec vs. Remote-Exec
 With Terraform the plugins have two options to do the job:
--   [**Local-Exec:**](https://www.terraform.io/docs/provisioners/local-exec.html) From our local machine
--   [**Remote-Exec:**](https://www.terraform.io/docs/provisioners/remote-exec.html) On the remote instance
+-   [**Local-Exec:**](https://www.terraform.io/docs/provisioners/local-exec) From our local machine
+-   [**Remote-Exec:**](https://www.terraform.io/docs/provisioners/remote-exec) On the remote instance
 
 One example of local-exec is create a ssh key in our machine.
 
@@ -478,7 +478,7 @@ A data block request that Terraform read from a given data source and export the
 <img src="https://miro.medium.com/max/1400/1*3nnDHIS3zQ2W0CsGCjsHvQ.png" width="800"/>[^1]
 
 ### Versioning
-[The `required_version` setting](https://www.terraform.io/docs/configuration/terraform.html#specifying-a-required-terraform-version) can be used to constrain which versions of the Terraform CLI can be used with your configuration. If the running version of Terraform doesn't match the constraints specified, Terraform will produce an error and exit without taking any further actions.
+[The `required_version` setting](https://www.terraform.io/docs/configuration/terraform#specifying-a-required-terraform-version) can be used to constrain which versions of the Terraform CLI can be used with your configuration. If the running version of Terraform doesn't match the constraints specified, Terraform will produce an error and exit without taking any further actions.
 
 ```
 terraform {
@@ -488,13 +488,12 @@ terraform {
 
 The value for `required_version` is a string containing a comma-separated list of constraints. Each constraint is an operator followed by a version number, such as `> 0.12.0`. The following constraint operators are allowed:
 
--   [`=`](https://www.terraform.io/docs/configuration/terraform.html#) (or no operator): exact version equality
--   [`!=`](https://www.terraform.io/docs/configuration/terraform.html#-1): version not equal
--   [`>`](https://www.terraform.io/docs/configuration/terraform.html#gt-), `>=`, `<`, `<=`: version comparison, where "greater than" is a larger version number
--   [`~>`](https://www.terraform.io/docs/configuration/terraform.html#gt--1): pessimistic constraint operator, constraining both the oldest and newest version allowed. For example, `~> 0.9` is equivalent to `>= 0.9, < 1.0`, and `~> 0.8.4`, is equivalent to `>= 0.8.4, < 0.9`
+-   `=` (or no operator): exact version equality
+-   `!=`: version not equal
+-   `>`, `>=`, `<`, `<=`: version comparison, where "greater than" is a larger version number
+-   `~>`: _pessimistic_ constraint operator, constraining both the oldest and newest version allowed. For example, `~> 0.9` is equivalent to `>= 0.9, < 1.0`, and `~> 0.8.4`, is equivalent to `>= 0.8.4, < 0.9`
 
-We can also specified a provider version requirement
-
+We can also specified a provider version requirement:
 ```
 provider "aws" {
 	region = "us-east-1"
@@ -538,9 +537,9 @@ A module is a simple directory that contains other `.tf` files. Using modules we
 <https://registry.terraform.io/> is the place to find modules, theses modules are verified by HashiCorp
 
 ### Modules inputs/outputs
+For make modules inputs we use inputs variables. 
 
-For make modules inputs we use inputs variables. Example module code:
-
+Example module code:
 ```
 variable "dbname" {
 	type = string
