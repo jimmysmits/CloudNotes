@@ -13,10 +13,10 @@ The infrastructure Terraform can manage includes low-level components such as co
 
 ## How it works
 Terraform creates and manages resources on cloud platforms and other services through their application programming interfaces (APIs). Providers enable Terraform to work with virtually any platform or service with an accessible API.
-![](https://miro.medium.com/max/1400/1*A1PWiPFasWKNePCgL6N_Cg.png)[^1]
+<img src="https://miro.medium.com/max/1400/1*A1PWiPFasWKNePCgL6N_Cg.png" width="900"/>[^1]
 
 # Expressions
-<img src="https://miro.medium.com/max/1400/1*RgNuNbnxCekhoIu-PgG-1Q.png" width ="900"/>[^1]
+<img src="https://miro.medium.com/max/1400/1*RgNuNbnxCekhoIu-PgG-1Q.png" width="900"/>[^1]
 
 _String_, _Number_, _Boolean_, _List_, _Map_, _Tuple_ or _Object_. We can define a `default` value, for example:
 
@@ -737,8 +737,8 @@ Link: <https://www.terraform.io/docs/commands/state/rm.html>
 
 A module is a simple directory that contains other .tf files. Using modules we can make the code reusable. Modules are local or remote.
 
-![](https://miro.medium.com/max/1400/1*ItQg-iUT0O3QDiLoJBndJg.png)[^2]
-![](https://miro.medium.com/max/1400/1*ilau3dR50ZfKadoc1_TO_w.png)[^2]
+<img src="https://miro.medium.com/max/1400/1*ItQg-iUT0O3QDiLoJBndJg.png" width="600"/>[^2]
+<img src="https://miro.medium.com/max/1400/1*ilau3dR50ZfKadoc1_TO_w.png" width="600"/>[^2]
 
 ### TERRAFORM REGISTRY
 
@@ -793,26 +793,29 @@ output "dbprivateip" {
 }
 
 ```
-![](https://miro.medium.com/max/1400/1*nC50N58BRmDPkIKGHQOqbA.png)[^2]
+<img src="https://miro.medium.com/max/1400/1*nC50N58BRmDPkIKGHQOqbA.png" width="700"/>[^2]
 
 ### CHILD MODULES
 
 Terraform allow having child modules, modules within modules. Basically is a directory with tf files, with others directories with others sub modules. After add a subdirectory, remember to execute again `terraform init`
 
-![](https://miro.medium.com/max/1400/1*7OER_lXpP-25B1LKW1lPOw.png)[^2]
+<img src="https://miro.medium.com/max/1400/1*7OER_lXpP-25B1LKW1lPOw.png" width="700"/>[^2]
 
 ### MODULE COMPOSITION
-The key features of modules are _Re-usability_ and _Composability_. Below are some patterns to keep in mind when creating flexible, re-usable and composable modules.
+The key features of modules are _re-usability_ and _Ccmposability_. Below are some patterns to keep in mind when creating flexible, re-usable and composable modules.
 
-- Keep a flat tree of module calls: try to avoid having children modules that have their own children: The [Terraform documentation](https://www.terraform.io/language/modules/develop/composition#module-composition) recommends only one level of child modules.
-<img src="https://miro.medium.com/max/1400/1*N6YMOp-V3uQcF_sHFoztNA.png" width="600"/>[^2]
+> Keep a flat tree of module calls. Try to avoid having children modules that have their own children: The [Terraform documentation](https://www.terraform.io/language/modules/develop/composition#module-composition) recommends only one level of child modules.
 
+<img src="https://miro.medium.com/max/1400/1*N6YMOp-V3uQcF_sHFoztNA.png" width="700"/>[^2]
 
-- Keep modules relatively small and pass in dependencies instead (_Dependency Inversion_).
-<img src="https://miro.medium.com/max/1400/1*VOG5X8xSEiFCoAFenQ66hQ.png" width="600"/>[^2]
+> Keep modules relatively small and pass in dependencies instead (_dependency inversion_).
+
+<img src="https://miro.medium.com/max/1400/1*VOG5X8xSEiFCoAFenQ66hQ.png" width="700"/>[^2]
+
 In the example above the network creation is separated from the redis module. This makes it easy for the resources defined by the module to coexist with other infrastructure in the same network.
 
-- Avoid complex conditional branches when creating objects within modules. Using an input variable is more declarative.
+> Avoid complex conditional branches when creating objects within modules. Using an input variable is more declarative.
+
 <img src="https://miro.medium.com/max/1400/1*expkYWhUbQfQLsOTYVXQxQ.png" width="600"/>[^2]
 
 
