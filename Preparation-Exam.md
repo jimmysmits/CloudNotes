@@ -1110,11 +1110,11 @@ Sentinel, VCS Integration are offered also in Terraform Cloud. Everything that i
 
 # Appendix
 
--   A Terraform Enterprise install that is provisioned on a network that does not have Internet access is generally known as an air-gapped install. These types of installs require you to pull updates, providers, etc. from external sources vs. being able to download them directly.
+-   A Terraform Enterprise install that is provisioned on a network that does not have Internet access is generally known as an _air-gapped_ install. These types of installs require you to pull updates, providers, etc. from external sources vs. being able to download them directly.
 
 -   Terraform Enterprise requires a PostgresSQL for a clustered deployment.
 
--   Some Backends supported: Terraform Enterprise, Consul, S3, Artifactory.
+-   Some Bbckends supported: (1) Terraform Enterprise, (2) Consul, (3) AWS S3, (4) Artifactory.
 
 -   Terraform Cloud supports the following VCS providers: GitHub, Gitlab, Bitbucket and Azure DevOps
 
