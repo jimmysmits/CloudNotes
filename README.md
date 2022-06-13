@@ -14,7 +14,7 @@ Please check out these amazing CheatSheets:
 - [LPI Linux Essentials](/CloudNotes/LPILinuxEssentials.html)
 
 ## Notes for Azure Certfications.
-- [Azure Fundamentals : AZ-900](/CloudNotes/AzureFundamentals.html)
+- [Azure Fundamentals : AZ-900](/CPP.md)
 
 ## Notes for Terraform Certifications.
 - [Terraform Associate Certification](/CloudNotes/Terraform.html)
