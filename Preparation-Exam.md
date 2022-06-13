@@ -45,7 +45,8 @@ variable "sshport" {
 
 ```
 
-> **Note** Both _Number_ and _Integer_ don't need double quotes, but Terraform automatically converts _Number_ and _Boolean_ values to strings when needed. For example 5 and "5" both are correct.
+> **Note** 
+> Both _Number_ and _Integer_ don't need double quotes, but Terraform automatically converts _Number_ and _Boolean_ values to strings when needed. For example 5 and "5" both are correct.
 
 ## Variables type: List
 
@@ -76,7 +77,8 @@ variable "mymap" {
 
 For example, if we need to access the value of Key1 (Value1) we can using the next example `var.mymap["Key1"]`
 
-> **Note** Remember, we use [ ] for list, and we use { } for maps
+> **Note** 
+> Remember, we use [ ] for list, and we use { } for maps
 
 ## Variables type: Tuple
 
@@ -105,7 +107,8 @@ variable "myobject" {
 
 ```
 
-> **Note** Using objects and tuples allows us to have multiple values of several distinct types to be grouped as a single value.
+> **Note** 
+> Using objects and tuples allows us to have multiple values of several distinct types to be grouped as a single value.
 
 # Blocks
 ![](https://miro.medium.com/max/1400/1*b8enCRGjvJkO6texZBnEfg.png)[^1]
@@ -193,7 +196,8 @@ A local value assigns a name to an [expression](https://www.terraform.io/docs/c
 
 Comparing modules to functions in a traditional programming language: if [input variables](https://www.terraform.io/docs/configuration/variables.html) are analogous to function arguments and [outputs values](https://www.terraform.io/docs/configuration/outputs.html) are analogous to function return values, then *local values* are comparable to a function's local temporary symbols.
 
-> **Note** For brevity, local values are often referred to as just "locals" when the meaning is clear from context.
+> **Note** 
+> For brevity, local values are often referred to as just "locals" when the meaning is clear from context.
 
 **Declaring a local value:**
 A set of related local values can be declared together in a single `locals` block.
@@ -237,7 +241,8 @@ policy = {
 
 ```
 
-> **Note** The `terraform.tfvars` file is used to define variables and the `.tf` file declare that the variable exists.
+> **Note** 
+> The `terraform.tfvars` file is used to define variables and the `.tf` file declare that the variable exists.
 
 Link: <https://amazicworld.com/difference-between-variable-tf-and-variable-tfvars-in-terraform>
 
@@ -262,13 +267,15 @@ terraform plan -var-file=prod.tfvars
 -   The tfvarsfile, if present. `terraform.tfvars`
 -   Environment variables
 
-> **Note** there is no mention of .tf file declaration in there, this is because variables declared in .tf files are concatenated into a single entity consisting of your variables.tf your main.tf and your output.tf files before being processed by Terraform. Hence this declaration have highest precedence in order of application.
+> **Note** 
+> There is no mention of .tf file declaration in there, this is because variables declared in .tf files are concatenated into a single entity consisting of your variables.tf your main.tf and your output.tf files before being processed by Terraform. Hence this declaration have highest precedence in order of application.
 
 ## Providers
 
 A provider is responsible for understanding API interactions and exposing resources. If an API is available, you can create a provider. A provider user a plugin. In order to make a provider available on Terraform, we need to make a `terraform init`, this commands download any plugins we need for our providers. If for example we need to copy the plugin directory manually, we can do it, moving the files to `.terraform.d/plugins`
 
-> **Note** Using `terraform providers` command we can view the specified version constraints for all providers used in the current configuration
+> **Note** 
+> Using `terraform providers` command we can view the specified version constraints for all providers used in the current configuration
 
 ![](https://miro.medium.com/max/1400/1*Vyb5RNl3PhxytQsD0vaH-w.png)[^1]
 
@@ -330,7 +337,8 @@ The resource type and name together serve as an identifier for a given resource 
 
 Within the block body (between `{` and `}`) are the configuration arguments for the resource itself. Most arguments in this section depend on the resource type, and indeed in this example both ami and `instance_type` are arguments defined specifically for the `aws_instance` resource type.
 
-> **Note** Resource names must start with a letter or underscore, and may contain only letters, digits, underscores, and dashes.
+> **Note** 
+> Resource names must start with a letter or underscore, and may contain only letters, digits, underscores, and dashes.
 
 ### Meta-Arguments
 The Terraform language defines several meta-arguments, which can be used with any resource type to change the behavior of resources.
@@ -348,7 +356,8 @@ The following meta-arguments are documented on separate pages:
 
 _Provisioners_ can be used to model specific actions on the local machine or on a remote machine in order to prepare servers or other infrastructure objects for service.
 
-> **Note** Provisioners should only be used as a last resort. For most common situations there are better alternatives.
+> **Note** 
+> Provisioners should only be used as a last resort. For most common situations there are better alternatives.
 
 Example:
 
@@ -386,7 +395,8 @@ resource "aws_instance" "web" {
 
 Destroy provisioners are run before the resource is destroyed. If they fail, Terraform will error and rerun the provisioners again on the next `terraform apply`
 
-> **Note** By default, a defined provisioner is a creation-time provisioner. You must explicitly define a provisioner to be a destroy-time provisioner
+> **Note** 
+> By default, a defined provisioner is a creation-time provisioner. You must explicitly define a provisioner to be a destroy-time provisioner
 
 ##### Local-Exec vs. Remote-Exec
 
@@ -475,7 +485,8 @@ It is thus primarily useful for general verification of reusable modules, includ
 
 It is safe to run this command automatically, for example as a post-save check in a text editor or as a test step for a re-usable module in a CI system.
 
-> **Note** Validation requires an initialized working directory with any referenced plugins and modules installed.
+> **Note** 
+> Validation requires an initialized working directory with any referenced plugins and modules installed.
 
 Link: <https://www.terraform.io/docs/commands/validate.html>
 
@@ -534,7 +545,8 @@ Link: <https://www.terraform.io/docs/internals/resource-addressing.html>
 
 The `terraform untaint` command manually unmark a Terraform-managed resource as tainted, restoring it as the primary instance in the state.
 
-> **Note** This command *will not* modify infrastructure, but does modify the state file in order to unmark a resource as tainted.
+> **Note** 
+> This command *will not* modify infrastructure, but does modify the state file in order to unmark a resource as tainted.
 
 ```
 $ terraform untaint aws_vpc.myvpc
@@ -552,7 +564,7 @@ ADDRESS must be a valid [resource address](https://www.terraform.io/docs/intern
 
 ID is dependent on the resource type being imported. For example, for AWS instances it is the instance ID (`i-abcd1234`) but for AWS Route53 zones it is the zone ID (`Z12ABC4UGMOZ2N`).
 
-Usage: `terraform import [options] ADDRESS ID`
+**Usage:** `terraform import [options] ADDRESS ID`
 
 Example:
 
@@ -561,7 +573,8 @@ $ terraform import aws_vpc.vpcimport vpc-06f0e46d612
 
 ```
 
-🗒️: `terraform import` command can import resources directly into modules
+> **Note**
+>  `terraform import` command can import resources directly into modules
 
 Link: <https://www.terraform.io/docs/commands/import.html>
 
@@ -589,9 +602,11 @@ If we never create a workspace we use the default workspace
 
 ```
 
-> **Note** For local state, Terraform stores the workspace states in a directory called `terraform.tfstate.d`. This directory should be treated similarly to local-only `terraform.tfstate`
+> **Note**
+> For local state, Terraform stores the workspace states in a directory called `terraform.tfstate.d`. This directory should be treated similarly to local-only `terraform.tfstate`
 
-> **Note** Terraform Cloud and Terraform CLI both have features called "workspaces," but they're slightly different. CLI workspaces are alternate state files in the same working directory; they're a convenience feature for using one configuration to manage multiple similar groups of resources.
+> **Note**
+> Terraform Cloud and Terraform CLI both have features called "workspaces," but they're slightly different. CLI workspaces are alternate state files in the same working directory; they're a convenience feature for using one configuration to manage multiple similar groups of resources.
 
 #### terraform workspace new
 
@@ -730,11 +745,9 @@ A module is a simple directory that contains other .tf files. Using modules we c
 
 ### TERRAFORM REGISTRY
 
-Is the place to find modules, theses modules are verified by Hashicorp
+<https://registry.terraform.io/> is the place to find modules, theses modules are verified by HashiCorp
 
-Link: <https://registry.terraform.io/>
-
-### MODULES INPUTS/OUTPUTS[^2]
+### MODULES INPUTS/OUTPUTS
 
 For make modules inputs we use inputs variables. Example module code:
 
@@ -783,32 +796,30 @@ output "dbprivateip" {
 }
 
 ```
-![](https://miro.medium.com/max/1400/1*nC50N58BRmDPkIKGHQOqbA.png)
+![](https://miro.medium.com/max/1400/1*nC50N58BRmDPkIKGHQOqbA.png)[^2]
 
-### CHILD MODULES[^2]
+### CHILD MODULES
 
 Terraform allow having child modules, modules within modules. Basically is a directory with tf files, with others directories with others sub modules. After add a subdirectory, remember to execute again `terraform init`
 
-![](https://miro.medium.com/max/1400/1*7OER_lXpP-25B1LKW1lPOw.png)
+![](https://miro.medium.com/max/1400/1*7OER_lXpP-25B1LKW1lPOw.png)[^2]
 
-### MODULE COMPOSITION[^2]
+### MODULE COMPOSITION
 The key features of modules are _Re-usability_ and _Composability_. Below are some patterns to keep in mind when creating flexible, re-usable and composable modules.
 
-Keep a flat tree of module calls: try to avoid having children modules that have their own children: The [Terraform documentation](https://www.terraform.io/language/modules/develop/composition#module-composition) recommends only one level of child modules.
-![](https://miro.medium.com/max/1400/1*N6YMOp-V3uQcF_sHFoztNA.png)
+- Keep a flat tree of module calls: try to avoid having children modules that have their own children: The [Terraform documentation](https://www.terraform.io/language/modules/develop/composition#module-composition) recommends only one level of child modules.
+![](https://miro.medium.com/max/1400/1*N6YMOp-V3uQcF_sHFoztNA.png)[^2]
 
 
-Keep modules relatively small and pass in dependencies instead (_Dependency Inversion_).
+- Keep modules relatively small and pass in dependencies instead (_Dependency Inversion_).
 ![](https://miro.medium.com/max/1400/1*VOG5X8xSEiFCoAFenQ66hQ.png)
 In the example above the network creation is separated from the redis module. This makes it easy for the resources defined by the module to coexist with other infrastructure in the same network.
 
-Avoid complex conditional branches when creating objects within modules. Using an input variable is more declarative.
+- Avoid complex conditional branches when creating objects within modules. Using an input variable is more declarative.
 ![](https://miro.medium.com/max/1400/1*expkYWhUbQfQLsOTYVXQxQ.png)
 
-READ AND WRITE CONFIGURATION
-----------------------------
 
-#### DYNAMIC BLOCKS
+## DYNAMIC BLOCKS
 
 Within top-level block constructs like resources, expressions can usually be used only when assigning a value to an argument using the `name = expression` form. This covers many uses, but some resource types include repeatable *nested blocks* in their arguments.
 
@@ -878,7 +889,8 @@ output "dbserver" {
 
 A data block request that Terraform read from a given data source and export the result under the give local name.
 
-> **Note** Data source attributes are interpolated with the general syntax *data.TYPE.NAME.ATTRIBUTE*. The interpolation for a resource is the same but without the *data.* prefix (TYPE.NAME.ATTRIBUTE).
+> **Note**
+> Data source attributes are interpolated with the general syntax *data.TYPE.NAME.ATTRIBUTE*. The interpolation for a resource is the same but without the *data.* prefix (TYPE.NAME.ATTRIBUTE).
 
 Link: <https://www.terraform.io/docs/providers/aws/d/instance.html>
 
@@ -891,7 +903,8 @@ max(5, 12, 9)
 
 ```
 
-> **Note** The Terraform language does not support user-defined functions, and so only the functions built in to the language are available for use.
+> **Note**
+> The Terraform language does not support user-defined functions, and so only the functions built in to the language are available for use.
 
 A very useful function is the `file` function, using that, we can read the contents of a file and returns them as a string. Another important function is the `flatten` function, this takes a list and replaces any elements that are list with a flattened sequence of the list contents.
 
@@ -960,7 +973,7 @@ With a partial configuration, the remaining configuration arguments must be prov
 -   _File:_ A configuration file may be specified via the `init` command line. To specify a file, use the `-backend-config=PATH` option when running `terraform init`
 -   _Command-line key/value pairs:_ Key/value pairs can be specified via the `init` command line.
 
-## TERRAFORM REFRESH
+## terraform refresh
 
 The `terraform refresh` command is used to reconcile the state Terraform knows about (via its state file) with the real-world infrastructure. This can be used to detect any drift from the last-known state, and to update the state file.
 
@@ -980,7 +993,7 @@ $ terraform plan
 
 Link: <https://www.terraform.io/docs/commands/refresh.html>
 
-## REMOTE BACKENDS
+## Remote backends
 
 Stores the state as a given key in a given bucket on [Amazon S3](https://aws.amazon.com/s3/). This backend also supports state locking and consistency checking via [Dynamo DB](https://aws.amazon.com/dynamodb/), which can be enabled by setting the `dynamodb_table` field to an existing DynamoDB table name. A single DynamoDB table can be used to lock multiple remote state files. Terraform generates key names that include the values of the `bucket` and `key` variables.
 
@@ -997,9 +1010,11 @@ terraform {
 
 ```
 
-> **Note** This assumes we have a bucket created called `mybucket`. The Terraform state is written to the key `state/terraform.tfstate`.
+> **Note**
+> This assumes we have a bucket created called `mybucket`. The Terraform state is written to the key `state/terraform.tfstate`.
 
-> **Note** If we have a local state, and after that we change to the S3 backend, when we execute `terraform init` the system ask us if we want to copy existing state to the new backend.
+> **Note**
+> If we have a local state, and after that we change to the S3 backend, when we execute `terraform init` the system ask us if we want to copy existing state to the new backend.
 
 Similar to if we delete a remote backend from the configuration, when we execute the re-initialization, Terraform will ask if we would like to migrate our state back down to normal local state.
 
@@ -1039,7 +1054,7 @@ When we use remote states, Terraform save all the temporal information on memory
 
 Backend cannot have any interpolations or use any variables. This need to be manually hardcoded
 
-## STATE PUSH
+## terraform state push
 
 The `terraform state push` command is used to manually upload a local state file to [remote state](https://www.terraform.io/docs/state/remote.html). This command also works with local state.
 
@@ -1047,14 +1062,15 @@ Usage: `terraform state push [options] PATH`
 
 Link: <https://www.terraform.io/docs/commands/state/push.html>
 
-## TYPES OF BACKEND
+## Types of backend
 
 -   Standard: state management, storage and locking
 -   Enhanced: Only on Terraform Cloud, standard + can run operations remotely
 
-> **Note** Backends that support state lockings: (1) AzureRM, (2) Consul, (3) AWS S3
+> **Note**
+> Backends that support state lockings: (1) AzureRM, (2) Consul, (3) AWS S3
 
-## RECAP OF STATE
+## State in summary
 
 -   Only ONE backend allowed
 -   Secrets are stored in state
@@ -1065,22 +1081,6 @@ Link: <https://www.terraform.io/docs/commands/state/push.html>
 -   `terraform refresh` will attempt to resync the state
 -   `terraform state push` will override the state
 
-# Debugging in Terraform
-
-Terraform has detailed logs which can be enabled by setting the `TF_LOG` environment variable to any value. This will cause detailed logs to appear on stderr.
-
-Is not about to Terraform Client Debugging, panic errors, go errors, etc. Is useful to provide the logs to Hashicorp.
-
-```
-export TF_LOG=TRACE
-
-```
-
-You can set `TF_LOG` to one of the log levels `TRACE`, `DEBUG`, `INFO`, `WARN` or `ERROR` to change the verbosity of the logs. `TRACE` is the most verbose and it is the default if `TF_LOG` is set to something other than a log level name.
-
-> **Note** When `TF_LOG_PATH` is set, `TF_LOG` must be set in order for any logging to be enabled, and `TF_LOG_PATH` point to a specific file (not directory), for example `TF_LOG_PATH=./terraform.log`
-
-Link: <https://www.terraform.io/docs/internals/debugging.html>
 
 # Terraform Cloud & Enterprise
 
@@ -1144,6 +1144,26 @@ Terraform Enterprise is a hosted version of Terraform Cloud, but using Terraform
 Sentinel, VCS Integration are offered also in Terraform Cloud. Everything that is in Terraform Cloud is already included in Terraform Enterprise.
 
 # Appendix
+
+## Debugging in Terraform
+
+Terraform has detailed logs which can be enabled by setting the `TF_LOG` environment variable to any value. This will cause detailed logs to appear on stderr.
+
+Is not about to Terraform Client Debugging, panic errors, go errors, etc. Is useful to provide the logs to Hashicorp.
+
+```
+export TF_LOG=TRACE
+
+```
+
+You can set `TF_LOG` to one of the log levels `TRACE`, `DEBUG`, `INFO`, `WARN` or `ERROR` to change the verbosity of the logs. `TRACE` is the most verbose and it is the default if `TF_LOG` is set to something other than a log level name.
+
+> **Note** 
+> When `TF_LOG_PATH` is set, `TF_LOG` must be set in order for any logging to be enabled, and `TF_LOG_PATH` point to a specific file (not directory), for example `TF_LOG_PATH=./terraform.log`
+
+Link: <https://www.terraform.io/docs/internals/debugging.html>
+
+## Miscellaneous
 
 -   A Terraform Enterprise install that is provisioned on a network that does not have Internet access is generally known as an _air-gapped_ install. These types of installs require you to pull updates, providers, etc. from external sources vs. being able to download them directly.
 
