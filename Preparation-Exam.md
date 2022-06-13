@@ -1120,7 +1120,7 @@ The following Terraform files should be ignored by Git when committing code to a
 - The `terraform.tfvars` file may contain sensitive data, such as passwords or IP addresses of an environment that you may not want to share with others.
 
 ## Debugging in Terraform
-Terraform has detailed logs which can be enabled by setting the `TF_LOG` environment variable to any value. This will cause detailed logs to appear on stderr.
+[Terraform has detailed logs](https://www.terraform.io/docs/internals/debugging.html) which can be enabled by setting the `TF_LOG` environment variable to any value. This will cause detailed logs to appear on stderr.
 
 Is not about to Terraform Client Debugging, panic errors, go errors, etc. Is useful to provide the logs to Hashicorp. You can run the following command: `export TF_LOG=TRACE`.
 
@@ -1128,8 +1128,6 @@ You can set `TF_LOG` to one of the log levels `TRACE`, `DEBUG`, `INFO`, `W
 
 > **Note** 
 > When `TF_LOG_PATH` is set, `TF_LOG` must be set in order for any logging to be enabled, and `TF_LOG_PATH` point to a specific file (not directory), for example `TF_LOG_PATH=./terraform.log`
-
-Link: <https://www.terraform.io/docs/internals/debugging.html>
 
 ## Miscellaneous
 -   A Terraform Enterprise install that is provisioned on a network that does not have Internet access is generally known as an _air-gapped_ install. These types of installs require you to pull updates, providers, etc. from external sources vs. being able to download them directly.
@@ -1139,18 +1137,16 @@ Link: <https://www.terraform.io/docs/internals/debugging.html>
 -   The existence of a provider plugin found locally in the working directory does not itself create a provider dependency. The plugin can exist without any reference to it in Terraform configuration.
 -   Function `index` finds the element index for a given value in a list starting with index 0.
 -   HashiCorp style conventions suggest you that align the equals sign for consecutive arguments for easing readability for configurations
-
+    
     ```
     ami           = "abc123"
     instance_type = "t2.micro"
-
     ```
     
 -   Terraform can limit the number of concurrent operations as Terraform [walks the graph](https://www.terraform.io/docs/internals/graph.html#walking-the-graph) using the [`-parallelism=n`](https://www.terraform.io/docs/commands/plan.html#parallelism-n) argument. The default value for this setting is `10`. This setting might be helpful if you're running into API rate limits.
 -   HashiCorp style conventions state that you should use two spaces between each nesting level to improve the readability of Terraform configurations.
--   Terraform supports the #, //, and /*..*/ for commenting Terraform configuration files. Please use them when writing Terraform so both you and others who are using your code have a full understanding of what the code is intended to do.
-
--   The `terraform console` command provides an interactive console for evaluating [expressions](https://www.terraform.io/docs/configuration/expressions.html) such interpolations. <https://www.terraform.io/docs/commands/console.html>
+-   Terraform supports the `#`, `//`, and `/*..*/` for commenting Terraform configuration files. Please use them when writing Terraform so both you and others who are using your code have a full understanding of what the code is intended to do.
+-   The `terraform console` command provides an interactive console for evaluating [expressions](https://www.terraform.io/docs/configuration/expressions.html) such interpolations. <https://www.terraform.io/docs/commands/console.html>.
 
 [^1]: https://medium.com/better-programming/how-terraform-works-a-visual-intro-6328cddbe067
 [^2]: https://medium.com/@mfundo/terraform-modules-illustrate-26cbc48be83a
