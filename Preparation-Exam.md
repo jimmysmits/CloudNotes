@@ -109,6 +109,24 @@ variable "myobject" {
 > Using objects and tuples allows us to have multiple values of several distinct types to be grouped as a single value.
 
 # Blocks
+A block is a container for other content.
+
+Example:
+```
+resource "aws_instance" "example" {
+  ami = "abc123"
+
+  network_interface {
+    # ...
+  }
+}
+```
+A block has a type (`resource` in this example). Each block type defines how many labels must follow the type keyword. The resource block type expects two labels, which are `aws_instance` and `example` in the example above. A particular block type may have any number of required labels, or it may require none as with the nested `network_interface` block type.
+
+After the block type keyword and any labels, the block body is delimited by the `{` and `}` characters. Within the block body, further arguments and blocks may be nested, creating a hierarchy of blocks and their associated arguments.
+
+The Terraform language uses a limited number of top-level block types, which are blocks that can appear outside of any other block in a configuration file. Most of Terraform's features (including resources, input variables, output values, data sources, etc.) are implemented as top-level blocks.
+
 <img src="https://miro.medium.com/max/1400/1*b8enCRGjvJkO6texZBnEfg.png" width="600"/>[^1]
 
 ## (Input) Variables & Values
@@ -118,19 +136,12 @@ The Terraform language includes a few kinds of blocks for requesting or publishi
 - **Output values** are like return values for a Terraform module.
 - **Local values** are a convenience feature for assigning a short name to an expression.
 
+### (Input) variables
+Each input variable accepted by a module must be declared using a variable block.  Terraform CLI defines optional arguments for variable declarations.
+
 <img src="https://miro.medium.com/max/1400/1*_FWwGch6_ettk6ZvYPYwAw.png" width="800"/>[^1]
 
-### (Input) variables
-Terraform CLI defines the following optional arguments for variable declarations:
-
-- `default` - A default value which then makes the variable optional.
-- `type` - This argument specifies what value types are accepted for the variable.
-- `description` - This specifies the input variable's documentation.
-- `validation` - A block to define validation rules, usually in addition to type constraints.
-- `sensitive` - Limits Terraform UI output when the variable is used in configuration.
-- `nullable` - Specify if the variable can be null within the module.
-
-Input variables permit the end-user to set a variable manually after running `terraform plan`, we can add a "description," and when we run a plan, it shows a message.
+Input variables enables the end-user to set a variable manually after running `terraform plan`, we can add a `description` and after Terraform has run the plan it will show a message to enter a specific value.
 
 Example:
 ```
@@ -149,6 +160,67 @@ var.inputname
 	Enter a value:
 
 ```
+
+#### Assigning Values to Root Module Variables
+When variables are declared in the root module of your configuration, they can be set in a number of ways:
+
+- In a Terraform Cloud workspace.
+- Individually, with the `-var` command line option.
+- In variable definitions (`.tfvars`) files, either specified on the command line or automatically loaded.
+- As environment variables.
+
+##### Environment variables
+
+We can create an export with our variable before execute `terraform plan`, and overwrite the value on the .tf files, for example `export TF_VAR_vpcname=envvpc`. This is useful for pass secrets or sensitive information in a secure form.
+
+<img src="https://miro.medium.com/max/1400/1*a1XXIztHa2Et_g-pSftDSw.png" width="800"/>[^1]
+
+##### CLI variables
+
+Another way to set variables is by using the command-line, for example `terraform plan -var="vpcname=cliname"`
+
+##### TFVARS files
+
+Passing variables inside a file, this is possible create a file called `terraform.tfvars` this file can be in a yaml or json notation, and is very simple, and also we can add maps, for example:
+
+```
+vpcname = "tfvarsname"
+port = 22
+policy = {
+	test = 1
+	debug = "true"
+}
+
+```
+
+> **Note** 
+> The `terraform.tfvars` file is used to define variables and the `.tf` file declare that the variable exists.
+
+Link: <https://amazicworld.com/difference-between-variable-tf-and-variable-tfvars-in-terraform>
+
+### AUTO TFVARS
+
+This is for example using a file called `dev.auto.tfvars` (is the next file that look after look in the terraform.tfvars)
+
+### MULTIPLE VALUE FILES
+
+We can create a specified `*.tvars` file and load for example with `terraform plan`, this is very useful to settings variables for different environments.
+
+```
+terraform plan -var-file=prod.tfvars
+
+```
+
+### Load order
+
+-   Any -var and -var-file options on the command line, in order they are provided. (This includes variables set by a Terraform Cloud workspace.)
+-   Any *.auto.tfvars or *.auto.tfvars.json files, processed in lexical order of their filenames.
+-   The tfvars.jsonfile, if present. `terraform.tfvars.json`
+-   The tfvarsfile, if present. `terraform.tfvars`
+-   Environment variables
+
+> **Note** 
+> There is no mention of .tf file declaration in there, this is because variables declared in .tf files are concatenated into a single entity consisting of your variables.tf your main.tf and your output.tf files before being processed by Terraform. Hence this declaration have highest precedence in order of application.
 
 ### Ouput values
 
@@ -196,59 +268,6 @@ The _expressions_ assigned to local value names can either be simple constants l
 Local values can be helpful to avoid repeating the same values or expressions multiple times in a configuration, but if overused they can also make a configuration hard to read by future maintainers by hiding the actual values used.
 
 Use local values only in moderation, in situations where a single value or result is used in many places *and* that value is likely to be changed in future. The ability to easily change the value in a central place is the key advantage of local values.
-
-### Environment variables
-
-We can create an export with our variable before execute `terraform plan`, and overwrite the value on the .tf files, for example `export TF_VAR_vpcname=envvpc`. This is useful for pass secrets or sensitive information in a secure form.
-
-<img src="https://miro.medium.com/max/1400/1*a1XXIztHa2Et_g-pSftDSw.png" width="800"/>[^1]
-
-### CLI variables
-
-Another way to set variables is by using the command-line, for example `terraform plan -var="vpcname=cliname"`
-
-### TFVARS files
-
-Passing variables inside a file, this is possible create a file called `terraform.tfvars` this file can be in a yaml or json notation, and is very simple, and also we can add maps, for example:
-
-```
-vpcname = "tfvarsname"
-port = 22
-policy = {
-	test = 1
-	debug = "true"
-}
-
-```
-
-> **Note** 
-> The `terraform.tfvars` file is used to define variables and the `.tf` file declare that the variable exists.
-
-Link: <https://amazicworld.com/difference-between-variable-tf-and-variable-tfvars-in-terraform>
-
-### AUTO TFVARS
-
-This is for example using a file called `dev.auto.tfvars` (is the next file that look after look in the terraform.tfvars)
-
-### MULTIPLE VALUE FILES
-
-We can create a specified `*.tvars` file and load for example with `terraform plan`, this is very useful to settings variables for different environments.
-
-```
-terraform plan -var-file=prod.tfvars
-
-```
-
-### Load order
-
--   Any -var and -var-file options on the command line, in order they are provided. (This includes variables set by a Terraform Cloud workspace.)
--   Any *.auto.tfvars or *.auto.tfvars.json files, processed in lexical order of their filenames.
--   The tfvars.jsonfile, if present. `terraform.tfvars.json`
--   The tfvarsfile, if present. `terraform.tfvars`
--   Environment variables
-
-> **Note** 
-> There is no mention of .tf file declaration in there, this is because variables declared in .tf files are concatenated into a single entity consisting of your variables.tf your main.tf and your output.tf files before being processed by Terraform. Hence this declaration have highest precedence in order of application.
 
 ## Resources
 Resources are the most important element in the Terraform language. Each resource block describes one or more infrastructure objects, such as virtual networks, compute instances, or higher-level components such as DNS records. For example:
