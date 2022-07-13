@@ -298,7 +298,7 @@ resource "aws_instance" "web" {
 }
 ```
 
-The resource block above declares a resource of a given type ("aws_instance") with a given local name ("web"). The name is used to refer to this resource from elsewhere in the same Terraform module, but has no significance outside that module's scope.
+The resource block above declares a resource of a given type (`"aws_instance"`) with a given local name ("web"). The name is used to refer to this resource from elsewhere in the same Terraform module, but has no significance outside that module's scope.
 
 The resource type and name together serve as an identifier for a given resource and so must be unique within a module.
 
@@ -391,9 +391,9 @@ resource "null_resource" "generate-sshkey" {
 }
 ```
 
-Another example for local-exec is execute a script for Download Lambda dependencies, and after that, make a zip.
+Another example for `local-exec` is executing  a script for download AWS  Lambda dependencies, and after that, make a zip.
 
-One example for remote-exec is from the key create previously, we can configure on a deployed virtual machine
+One example for `remote-exec` is from the key create previously, we can configure on a deployed virtual machine
 
 ```
   provisioner "remote-exec" {
